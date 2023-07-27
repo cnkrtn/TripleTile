@@ -106,15 +106,18 @@ public class StoneEditorTool : EditorWindow
         selectedStone = stone;
     }
 
+ 
     private void DrawDropdownMenus()
     {
         GUILayout.BeginHorizontal();
 
         selectedLevelIndex = EditorGUILayout.Popup("Select Level", selectedLevelIndex, levelOptions);
         selectedLevel = selectedLevelIndex;
+        Debug.Log("Selected Level: " + (selectedLevel + 1));
 
         selectedGridIndex = EditorGUILayout.Popup("Select Grid", selectedGridIndex, gridOptions);
         selectedGrid = selectedGridIndex;
+        Debug.Log("Selected Grid: " + (selectedGrid + 1));
 
         GUILayout.EndHorizontal();
     }
@@ -153,6 +156,11 @@ public class StoneEditorTool : EditorWindow
         {
             cell.ID = selectedStone.ID;
             cell.Color = selectedStone.Color;
+
+            int row = 7 - cell.RowIndex; // Calculate the row index with respect to the bottom row being 0
+            int column = cell.ColIndex;
+
+            Debug.Log($"Cell Clicked: ID={cell.ID}, Color={cell.Color}, Row={row}, Column={column}");
         }
         else
         {
