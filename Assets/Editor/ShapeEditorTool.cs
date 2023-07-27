@@ -5,12 +5,18 @@ using System.IO;
 
 public class StoneEditorTool : EditorWindow
 {
-    private int cellSize = 40; // Size of each cell in the grid
-    private Stone[] stones = new Stone[5]; // Array to store the stone buttons
-    private Stone selectedStone; // Currently selected stone
-    private List<List<Cell[,]>> gridsByLevel = new List<List<Cell[,]>>(); // List to store grids for each level
-    private int selectedGrid = 0; // Default selected grid index is 0 (first grid)
-    private int selectedLevel = 0; // Default selected level index is 0
+    private int cellSize = 40;
+    private Stone[] stones = new Stone[5];
+    private Stone selectedStone;
+    private List<List<Cell[,]>> gridsByLevel = new List<List<Cell[,]>>();
+    private int selectedGrid = 0;
+    private int selectedLevel = 0;
+
+    private int selectedGridIndex = 0;
+    private int selectedLevelIndex = 0;
+
+    private string[] levelOptions = new string[10] { "Level 1", "Level 2", "Level 3", "Level 4", "Level 5", "Level 6", "Level 7", "Level 8", "Level 9", "Level 10" };
+    private string[] gridOptions = new string[5] { "Grid 1", "Grid 2", "Grid 3", "Grid 4", "Grid 5" };
 
     [MenuItem("Window/Stone Editor Tool")]
     private static void ShowWindow()
@@ -22,12 +28,18 @@ public class StoneEditorTool : EditorWindow
 
     private void OnEnable()
     {
-        // Initialize the stone buttons with different colors
-        stones[0] = new Stone(1, Color.red);
-        stones[1] = new Stone(2, Color.green);
-        stones[2] = new Stone(3, Color.blue);
-        stones[3] = new Stone(4, Color.yellow);
-        stones[4] = new Stone(5, Color.cyan);
+        // Initialize the stone buttons with different colors and sprites
+        Sprite stone1Sprite = Resources.Load<Sprite>("Sprites/Red"); // Replace "Stone1Sprite" with the actual path to your sprite
+        Sprite stone2Sprite = Resources.Load<Sprite>("Sprites/Green");
+        Sprite stone3Sprite = Resources.Load<Sprite>("Sprites/Blue");
+        Sprite stone4Sprite = Resources.Load<Sprite>("Sprites/Yellow");
+        Sprite stone5Sprite = Resources.Load<Sprite>("Sprites/Orange");
+
+        stones[0] = new Stone(1, Color.red, stone1Sprite);
+        stones[1] = new Stone(2, Color.green, stone2Sprite);
+        stones[2] = new Stone(3, Color.blue, stone3Sprite);
+        stones[3] = new Stone(4, Color.yellow, stone4Sprite);
+        stones[4] = new Stone(5, Color.cyan, stone5Sprite);
 
         // Add grids for each level
         for (int i = 0; i < 10; i++)
@@ -36,209 +48,14 @@ public class StoneEditorTool : EditorWindow
         }
     }
 
-    private void OnGUI()
-    {
-        DrawGrid();
-        DrawButtons();
-        DrawDropdowns();
-        DrawSaveButton();
-    }
-
-    private void DrawGrid()
-    {
-        List<Cell[,]> currentLevel = gridsByLevel[selectedLevel];
-        Cell[,] currentGrid = currentLevel[selectedGrid];
-
-        // Draw the 8x8 grid
-        GUILayout.BeginVertical(EditorStyles.helpBox);
-        for (int row = 7; row >= 0; row--)
-        {
-            GUILayout.BeginHorizontal();
-            for (int col = 0; col < 8; col++)
-            {
-                if (currentGrid[col, row] == null)
-                {
-                    currentGrid[col, row] = new Cell(Color.white); // Initialize cell with default color (white) and ID 0
-                }
-
-                // Set the cell size and use the color from the Cell as background
-                GUIStyle cellStyle = new GUIStyle(GUI.skin.button);
-                cellStyle.fixedWidth = cellSize;
-                cellStyle.fixedHeight = cellSize;
-                cellStyle.normal.background = TextureFromColor(currentGrid[col, row].Color);
-
-                if (GUILayout.Button("", cellStyle))
-                {
-                    // Handle cell click
-                    OnCellClick(row, col, currentGrid);
-                }
-            }
-            GUILayout.EndHorizontal();
-        }
-        GUILayout.EndVertical();
-    }
-
-    private void DrawButtons()
-    {
-        // Draw buttons in a row
-        GUILayout.BeginHorizontal();
-        foreach (Stone stone in stones)
-        {
-            if (GUILayout.Button($"Stone {stone.ID}"))
-            {
-                // Handle stone button click
-                OnStoneButtonClick(stone);
-            }
-        }
-        GUILayout.EndHorizontal();
-    }
-
-    private void DrawDropdowns()
-    {
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Select Grid:");
-        selectedGrid = EditorGUILayout.IntPopup(selectedGrid, new string[] { "Grid 1", "Grid 2", "Grid 3", "Grid 4", "Grid 5" }, new int[] { 0, 1, 2, 3, 4 });
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Select Level:");
-        selectedLevel = EditorGUILayout.IntPopup(selectedLevel, GetLevelNames(), GetLevelIndices());
-        GUILayout.EndHorizontal();
-    }
-
-    private string[] GetLevelNames()
-    {
-        List<string> levelNames = new List<string>();
-        for (int i = 0; i < gridsByLevel.Count; i++)
-        {
-            levelNames.Add($"Level {i + 1}");
-        }
-        return levelNames.ToArray();
-    }
-
-    private int[] GetLevelIndices()
-    {
-        int[] levelIndices = new int[gridsByLevel.Count];
-        for (int i = 0; i < gridsByLevel.Count; i++)
-        {
-            levelIndices[i] = i;
-        }
-        return levelIndices;
-    }
-
-    private void SaveGrid(int levelIndex)
-    {
-        if (levelIndex < 0 || levelIndex >= gridsByLevel.Count)
-        {
-            Debug.LogWarning("Invalid level index. Save failed.");
-            return;
-        }
-
-        List<Cell[,]> currentLevel = gridsByLevel[levelIndex];
-        Cell[,] currentGrid = currentLevel[selectedGrid];
-
-        List<SerializableCell> serializableCells = new List<SerializableCell>();
-        for (int row = 0; row < 8; row++)
-        {
-            for (int col = 0; col < 8; col++)
-            {
-                Cell cell = currentGrid[col, row];
-                serializableCells.Add(new SerializableCell(cell.RowIndex, cell.ColIndex, cell.ID));
-            }
-        }
-
-        GridData gridData = new GridData
-        {
-            Cells = serializableCells.ToArray(),
-            SelectedGrid = selectedGrid,
-            SelectedLevel = selectedLevel
-        };
-
-        string savePath = GetSavePathForLevel(levelIndex);
-        string jsonData = JsonUtility.ToJson(gridData, true);
-        File.WriteAllText(savePath, jsonData);
-
-        Debug.Log($"Grid data saved for Level {levelIndex + 1} to: {savePath}");
-    }
-
-    private string GetSavePathForLevel(int levelIndex)
-    {
-        string saveFolder = "Assets/LevelData";
-        string fileName = $"Level{levelIndex + 1}GridData.json";
-        return Path.Combine(saveFolder, fileName);
-    }
-
-    private void DrawSaveButton()
-    {
-        if (GUILayout.Button("Save All Levels"))
-        {
-            for (int levelIndex = 0; levelIndex < gridsByLevel.Count; levelIndex++)
-            {
-                SaveGrid(levelIndex);
-            }
-        }
-    }
-
-    private void OnCellClick(int row, int col, Cell[,] currentGrid)
-    {
-        // Handle cell click event
-        Cell clickedCell = currentGrid[col, row];
-        Debug.Log($"Cell ID: {clickedCell.ID} at ({clickedCell.RowIndex}, {clickedCell.ColIndex})");
-        if (selectedStone != null)
-        {
-            clickedCell.Color = selectedStone.Color;
-            clickedCell.ID = selectedStone.ID;
-            Repaint(); // Repaint the editor window to reflect the color and ID change
-        }
-    }
-
-    private void OnStoneButtonClick(Stone stone)
-    {
-        // Handle stone button click event
-        selectedStone = stone;
-        Debug.Log($"Stone {stone.ID} clicked with color {stone.Color}");
-    }
-
-    private void SaveGrid()
-    {
-        string savePath = EditorUtility.SaveFilePanel("Save Grid", "", "grid_data", "json");
-        if (string.IsNullOrEmpty(savePath))
-            return;
-
-        List<Cell[,]> currentLevel = gridsByLevel[selectedLevel];
-        Cell[,] currentGrid = currentLevel[selectedGrid];
-
-        List<SerializableCell> serializableCells = new List<SerializableCell>();
-        for (int row = 0; row < 8; row++)
-        {
-            for (int col = 0; col < 8; col++)
-            {
-                Cell cell = currentGrid[col, row];
-                serializableCells.Add(new SerializableCell(cell.RowIndex, cell.ColIndex, cell.ID));
-            }
-        }
-
-        GridData gridData = new GridData
-        {
-            Cells = serializableCells.ToArray(),
-            SelectedGrid = selectedGrid,
-            SelectedLevel = selectedLevel
-        };
-
-        string jsonData = JsonUtility.ToJson(gridData, true);
-        File.WriteAllText(savePath, jsonData);
-
-        Debug.Log("Grid data saved successfully!");
-    }
-
     private List<Cell[,]> CreateEmptyLevel()
     {
-        List<Cell[,]> levelGrids = new List<Cell[,]>();
+        List<Cell[,]> level = new List<Cell[,]>();
         for (int i = 0; i < 5; i++)
         {
-            levelGrids.Add(CreateEmptyGrid());
+            level.Add(CreateEmptyGrid());
         }
-        return levelGrids;
+        return level;
     }
 
     private Cell[,] CreateEmptyGrid()
@@ -248,23 +65,160 @@ public class StoneEditorTool : EditorWindow
         {
             for (int col = 0; col < 8; col++)
             {
-                grid[col, row] = new Cell(Color.white)
-                {
-                    RowIndex = row,
-                    ColIndex = col
-                };
+                grid[col, row] = new Cell(0, Color.white, col, row);
             }
         }
         return grid;
     }
 
-    private Texture2D TextureFromColor(Color color)
+    private void OnGUI()
     {
-        Texture2D texture = new Texture2D(1, 1);
-        texture.SetPixel(0, 0, color);
-        texture.Apply();
-        return texture;
+        GUILayout.Space(10);
+        DrawButtons();
+
+        GUILayout.Space(10);
+        DrawDropdownMenus();
+
+        GUILayout.Space(10);
+        DrawGrid();
+
+        GUILayout.Space(10);
+        DrawSaveButton();
+    }
+
+    private void DrawButtons()
+    {
+        // Draw buttons in a row
+        GUILayout.BeginHorizontal();
+        foreach (Stone stone in stones)
+        {
+            if (GUILayout.Button(stone.Sprite.texture, GUILayout.Width(cellSize), GUILayout.Height(cellSize)))
+            {
+                // Handle stone button click
+                OnStoneButtonClick(stone);
+            }
+        }
+        GUILayout.EndHorizontal();
+    }
+
+    private void OnStoneButtonClick(Stone stone)
+    {
+        selectedStone = stone;
+    }
+
+    private void DrawDropdownMenus()
+    {
+        GUILayout.BeginHorizontal();
+
+        selectedLevelIndex = EditorGUILayout.Popup("Select Level", selectedLevelIndex, levelOptions);
+        selectedLevel = selectedLevelIndex;
+
+        selectedGridIndex = EditorGUILayout.Popup("Select Grid", selectedGridIndex, gridOptions);
+        selectedGrid = selectedGridIndex;
+
+        GUILayout.EndHorizontal();
+    }
+
+    private void DrawGrid()
+    {
+        // Draw the selected grid
+        GUILayout.BeginVertical(GUI.skin.box);
+        GUILayout.Label($"Level: {selectedLevel + 1}, Grid: {selectedGrid + 1}");
+
+        GUILayout.BeginHorizontal();
+        for (int row = 0; row < 8; row++)
+        {
+            GUILayout.BeginVertical();
+            for (int col = 0; col < 8; col++)
+            {
+                Cell cell = gridsByLevel[selectedLevel][selectedGrid][col, row];
+                GUI.backgroundColor = cell.Color;
+                if (GUILayout.Button("", GUILayout.Width(cellSize), GUILayout.Height(cellSize)))
+                {
+                    OnCellClick(cell);
+                }
+            }
+            GUILayout.EndVertical();
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.EndVertical();
+
+        GUI.backgroundColor = Color.white;
+    }
+
+    private void OnCellClick(Cell cell)
+    {
+        if (selectedStone != null)
+        {
+            cell.ID = selectedStone.ID;
+            cell.Color = selectedStone.Color;
+        }
+        else
+        {
+            Debug.Log("No stone selected. Click a stone button first.");
+        }
+    }
+
+    private void DrawSaveButton()
+    {
+        if (GUILayout.Button("Save All Levels"))
+        {
+            for (int levelIndex = 0; levelIndex < gridsByLevel.Count; levelIndex++)
+            {
+                SaveGridsForLevel(levelIndex);
+            }
+        }
+    }
+
+    private void SaveGridsForLevel(int levelIndex)
+    {
+        if (levelIndex < 0 || levelIndex >= gridsByLevel.Count)
+        {
+            Debug.LogWarning("Invalid level index. Save failed.");
+            return;
+        }
+
+        List<Cell[,]> levelGrids = gridsByLevel[levelIndex];
+
+        for (int gridIndex = 0; gridIndex < levelGrids.Count; gridIndex++)
+        {
+            Cell[,] currentGrid = levelGrids[gridIndex];
+
+            List<SerializableCell> serializableCells = new List<SerializableCell>();
+            for (int row = 0; row < 8; row++)
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    Cell cell = currentGrid[col, row];
+                    serializableCells.Add(new SerializableCell(cell.RowIndex, cell.ColIndex, cell.ID));
+                }
+            }
+
+            GridData gridData = new GridData
+            {
+                Cells = serializableCells.ToArray(),
+                SelectedGrid = gridIndex,
+                SelectedLevel = levelIndex
+            };
+
+            string savePath = GetSavePathForGrid(levelIndex, gridIndex);
+            string jsonData = JsonUtility.ToJson(gridData, true);
+            File.WriteAllText(savePath, jsonData);
+
+            Debug.Log($"Grid data saved for Level {levelIndex + 1}, Grid {gridIndex + 1} to: {savePath}");
+        }
+    }
+
+    private string GetSavePathForGrid(int levelIndex, int gridIndex)
+    {
+        string saveFolder = "Assets/LevelData";
+        string fileName = $"Level{levelIndex + 1}_Grid{gridIndex + 1}_Data.json";
+        return Path.Combine(saveFolder, fileName);
+    }
+
+    private void OnSelectionChange()
+    {
+        Repaint();
     }
 }
-
-

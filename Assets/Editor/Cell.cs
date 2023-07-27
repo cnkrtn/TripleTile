@@ -3,13 +3,16 @@ using UnityEngine;
 [System.Serializable]
 public class Cell
 {
-    public int ID { get; set; } = 0; // Default ID is 0
-    public Color Color { get; set; }
-    public int RowIndex { get; set; } // Cell's row index in the grid
-    public int ColIndex { get; set; } // Cell's column index in the grid
+    public int ID;
+    public Color Color;
+    public int RowIndex;
+    public int ColIndex;
 
-    public Cell(Color color)
+    public Cell(int id, Color color, int rowIndex, int colIndex)
     {
+        ID = id;
         Color = color;
+        RowIndex = rowIndex;
+        ColIndex = colIndex;
     }
 }
