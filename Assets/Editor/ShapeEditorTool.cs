@@ -11,7 +11,7 @@ public class StoneEditorTool : EditorWindow
     private List<List<Cell[,]>> gridsByLevel = new List<List<Cell[,]>>();
     private int selectedGrid = 0;
     private int selectedLevel = 0;
-
+  
     private int selectedGridIndex = 0;
     private int selectedLevelIndex = 0;
 
@@ -46,6 +46,13 @@ public class StoneEditorTool : EditorWindow
         {
             gridsByLevel.Add(CreateEmptyLevel());
         }
+
+        for (int i = 0; i < gridsByLevel.Count; i++)
+        {
+            LoadGridsForLevel(i);
+        }
+        
+        
     }
 
     private List<Cell[,]> CreateEmptyLevel()
@@ -65,7 +72,7 @@ public class StoneEditorTool : EditorWindow
         {
             for (int col = 0; col < 8; col++)
             {
-                grid[col, row] = new Cell(0, Color.white, col, row);
+                grid[col, row] = new Cell(0, null, col, row);
             }
         }
         return grid;
@@ -135,10 +142,19 @@ public class StoneEditorTool : EditorWindow
             for (int col = 0; col < 8; col++)
             {
                 Cell cell = gridsByLevel[selectedLevel][selectedGrid][col, row];
-                GUI.backgroundColor = cell.Color;
-                if (GUILayout.Button("", GUILayout.Width(cellSize), GUILayout.Height(cellSize)))
+                if (cell.Sprite != null)
                 {
-                    OnCellClick(cell);
+                    if (GUILayout.Button(cell.Sprite.texture, GUILayout.Width(cellSize), GUILayout.Height(cellSize)))
+                    {
+                        OnCellClick(cell);
+                    }
+                }
+                else
+                {
+                    if (GUILayout.Button("", GUILayout.Width(cellSize), GUILayout.Height(cellSize)))
+                    {
+                        OnCellClick(cell);
+                    }
                 }
             }
             GUILayout.EndVertical();
@@ -146,21 +162,19 @@ public class StoneEditorTool : EditorWindow
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();
-
-        GUI.backgroundColor = Color.white;
     }
-
+    
     private void OnCellClick(Cell cell)
     {
         if (selectedStone != null)
         {
             cell.ID = selectedStone.ID;
-            cell.Color = selectedStone.Color;
+            cell.Sprite = selectedStone.Sprite;
 
-            int row = 7 - cell.RowIndex; // Calculate the row index with respect to the bottom row being 0
+            int row = 7 - cell.RowIndex;
             int column = cell.ColIndex;
 
-            Debug.Log($"Cell Clicked: ID={cell.ID}, Color={cell.Color}, Row={row}, Column={column}");
+            Debug.Log($"Cell Clicked: ID={cell.ID}, Sprite={cell.Sprite.name}, Row={row}, Column={column}");
         }
         else
         {
@@ -179,50 +193,118 @@ public class StoneEditorTool : EditorWindow
         }
     }
 
-    private void SaveGridsForLevel(int levelIndex)
+   private void SaveGridsForLevel(int levelIndex)
     {
-        if (levelIndex < 0 || levelIndex >= gridsByLevel.Count)
+        if (levelIndex >= gridsByLevel.Count)
         {
-            Debug.LogWarning("Invalid level index. Save failed.");
+            Debug.LogError($"Level index {levelIndex} is out of range.");
             return;
         }
 
-        List<Cell[,]> levelGrids = gridsByLevel[levelIndex];
+        List<Cell[,]> levelData = gridsByLevel[levelIndex];
+        List<SerializableGrid> serializedGrids = new List<SerializableGrid>();
 
-        for (int gridIndex = 0; gridIndex < levelGrids.Count; gridIndex++)
+        foreach (Cell[,] grid in levelData)
         {
-            Cell[,] currentGrid = levelGrids[gridIndex];
+            List<SerializableCell> serializedCells = new List<SerializableCell>();
 
-            List<SerializableCell> serializableCells = new List<SerializableCell>();
-            for (int row = 0; row < 8; row++)
+            for (int row = 0; row < 8; row++) // Loop through rows (grid size is 8x8)
             {
-                for (int col = 0; col < 8; col++)
+                for (int col = 0; col < 8; col++) // Loop through columns (grid size is 8x8)
                 {
-                    Cell cell = currentGrid[col, row];
-                    serializableCells.Add(new SerializableCell(cell.RowIndex, cell.ColIndex, cell.ID));
+                    Cell cell = grid[col, row];
+                    serializedCells.Add(new SerializableCell(cell));
                 }
             }
 
-            GridData gridData = new GridData
+            serializedGrids.Add(new SerializableGrid(serializedCells));
+        }
+
+        SerializableLevel serializableLevel = new SerializableLevel(levelIndex, serializedGrids);
+
+        string savePath = GetSavePathForLevel(levelIndex);
+        string json = JsonUtility.ToJson(serializableLevel, true);
+        File.WriteAllText(savePath, json);
+
+        Debug.Log($"Grid data saved for Level {levelIndex + 1} to: {savePath}");
+    }
+
+    private void LoadGridsForLevel(int levelIndex)
+    {
+        if (levelIndex >= gridsByLevel.Count)
+        {
+            Debug.LogError($"Level index {levelIndex} is out of range.");
+            return;
+        }
+
+        string loadPath = GetSavePathForLevel(levelIndex);
+
+        if (File.Exists(loadPath))
+        {
+            string json = File.ReadAllText(loadPath);
+            SerializableLevel serializableLevel = JsonUtility.FromJson<SerializableLevel>(json);
+
+            List<Cell[,]> levelData = new List<Cell[,]>();
+
+            foreach (SerializableGrid serializedGrid in serializableLevel.Grids)
             {
-                Cells = serializableCells.ToArray(),
-                SelectedGrid = gridIndex,
-                SelectedLevel = levelIndex
-            };
+                int rows = 8; // Assuming the grid size is always 8x8
+                int cols = 8;
 
-            string savePath = GetSavePathForGrid(levelIndex, gridIndex);
-            string jsonData = JsonUtility.ToJson(gridData, true);
-            File.WriteAllText(savePath, jsonData);
+                Cell[,] grid = new Cell[cols, rows];
 
-            Debug.Log($"Grid data saved for Level {levelIndex + 1}, Grid {gridIndex + 1} to: {savePath}");
+                foreach (SerializableCell serializedCell in serializedGrid.Cells)
+                {
+                    int rowIndex = serializedCell.RowIndex;
+                    int colIndex = serializedCell.ColIndex;
+                    int id = serializedCell.ID;
+
+                    // Now set the Sprite for the cell
+                    string spriteName = serializedCell.SpriteName;
+                    Sprite sprite = LoadSpriteByName(spriteName);
+
+                    Cell cell = new Cell(id, sprite, rowIndex, colIndex);
+
+                    grid[colIndex, rowIndex] = cell;
+                }
+
+                levelData.Add(grid);
+            }
+
+            if (levelIndex < gridsByLevel.Count)
+            {
+                gridsByLevel[levelIndex] = levelData;
+            }
+            else
+            {
+                gridsByLevel.Add(levelData);
+            }
+
+            Debug.Log($"Grid data loaded for Level {levelIndex + 1} from: {loadPath}");
+        }
+        else
+        {
+            Debug.LogWarning($"Save data not found for Level {levelIndex + 1} at path: {loadPath}");
         }
     }
 
-    private string GetSavePathForGrid(int levelIndex, int gridIndex)
+    private Sprite LoadSpriteByName(string spriteName)
     {
-        string saveFolder = "Assets/LevelData";
-        string fileName = $"Level{levelIndex + 1}_Grid{gridIndex + 1}_Data.json";
-        return Path.Combine(saveFolder, fileName);
+        string spritePath = "Sprites/" + spriteName;
+        return Resources.Load<Sprite>(spritePath);
+    }
+
+
+
+    private string GetSavePathForLevel(int levelIndex)
+    {
+        string levelFolderPath = "Assets/LevelData";
+        if (!Directory.Exists(levelFolderPath))
+        {
+            Directory.CreateDirectory(levelFolderPath);
+        }
+
+        return Path.Combine(levelFolderPath, $"Level_{levelIndex + 1}.json");
     }
 
     private void OnSelectionChange()

@@ -4,14 +4,14 @@ using UnityEngine;
 public class Cell
 {
     public int ID;
-    public Color Color;
     public int RowIndex;
     public int ColIndex;
-
-    public Cell(int id, Color color, int rowIndex, int colIndex)
+    public Sprite Sprite;
+    
+    public Cell(int id, Sprite sprite, int rowIndex, int colIndex)
     {
         ID = id;
-        Color = color;
+        Sprite = sprite;
         RowIndex = rowIndex;
         ColIndex = colIndex;
     }

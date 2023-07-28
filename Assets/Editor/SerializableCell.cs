@@ -1,16 +1,17 @@
 [System.Serializable]
 public class SerializableCell
 {
-    public int rowIndex;
-    public int colIndex;
     public int ID;
-    
+    public int RowIndex;
+    public int ColIndex;
+    public string SpriteName; // Store the sprite name instead of the actual Sprite
 
-    public SerializableCell(int rowIndex, int colIndex, int ID)
+   
+    public SerializableCell(Cell cell)
     {
-        this.rowIndex = rowIndex;
-        this.colIndex = colIndex;
-        this.ID = ID;
-        
+        ID = cell.ID;
+        RowIndex = cell.RowIndex;
+        ColIndex = cell.ColIndex;
+        SpriteName = cell.Sprite != null ? cell.Sprite.name : ""; // Store the Sprite name
     }
 }
