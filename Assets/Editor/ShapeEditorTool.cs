@@ -15,8 +15,8 @@ public class StoneEditorTool : EditorWindow
     private int selectedGridIndex = 0;
     private int selectedLevelIndex = 0;
 
-    private string[] levelOptions = new string[10] { "Level 1", "Level 2", "Level 3", "Level 4", "Level 5", "Level 6", "Level 7", "Level 8", "Level 9", "Level 10" };
-    private string[] gridOptions = new string[5] { "Grid 1", "Grid 2", "Grid 3", "Grid 4", "Grid 5" };
+    private string[] levelOptions = new string[5] { "Level 1", "Level 2", "Level 3", "Level 4", "Level 5", };
+    private string[] gridOptions = new string[3] { "Grid 1", "Grid 2", "Grid 3" };
 
     [MenuItem("Window/Stone Editor Tool")]
     private static void ShowWindow()
@@ -260,7 +260,7 @@ public class StoneEditorTool : EditorWindow
             cell.ID = selectedStone.ID;
             cell.Sprite = selectedStone.Sprite;
 
-            int row = 7 - cell.RowIndex;
+            int row =  cell.RowIndex;
             int column = cell.ColIndex;
 
             Debug.Log($"Cell Clicked: ID={cell.ID}, Sprite={cell.Sprite.name}, Row={row}, Column={column}");
