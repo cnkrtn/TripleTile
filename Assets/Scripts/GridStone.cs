@@ -91,4 +91,9 @@ public class GridStone : MonoBehaviour
             
 
     }
+    
+    private void OnMouseDown()
+    {
+        Debug.Log("Hit successful: GridStone clicked!");
+    }
 }

@@ -1595,7 +1595,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.4392157}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1795,7 +1795,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: -22.5, y: -26}
+  m_Spacing: {x: -28, y: -30}
   m_Constraint: 2
   m_ConstraintCount: 8
 --- !u!114 &261811659
@@ -4163,10 +4163,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: StoneBlue
       objectReference: {fileID: 0}
-    - target: {fileID: 6050603953405836029, guid: 5dfffcab9e26efe4fa5be45f07dd1e59, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5dfffcab9e26efe4fa5be45f07dd1e59, type: 3}
 --- !u!224 &775468499 stripped
@@ -4661,10 +4657,6 @@ PrefabInstance:
     - target: {fileID: 6050603953405836029, guid: dcd42c8692b73ae46aeb0b1cab9c4a57, type: 3}
       propertyPath: m_Name
       value: StoneRed (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6050603953405836029, guid: dcd42c8692b73ae46aeb0b1cab9c4a57, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcd42c8692b73ae46aeb0b1cab9c4a57, type: 3}
@@ -5829,10 +5821,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: StoneGreen
       objectReference: {fileID: 0}
-    - target: {fileID: 6050603953405836029, guid: 0f52ef18ef1b6204f8a81282557b67f2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f52ef18ef1b6204f8a81282557b67f2, type: 3}
 --- !u!224 &936132525 stripped
@@ -6823,10 +6811,6 @@ PrefabInstance:
     - target: {fileID: 6050603953405836029, guid: cfb4de82f9778924c9e070f1acee3edd, type: 3}
       propertyPath: m_Name
       value: StoneOrange
-      objectReference: {fileID: 0}
-    - target: {fileID: 6050603953405836029, guid: cfb4de82f9778924c9e070f1acee3edd, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfb4de82f9778924c9e070f1acee3edd, type: 3}
@@ -8655,10 +8639,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: StoneYellow
       objectReference: {fileID: 0}
-    - target: {fileID: 6050603953405836029, guid: be1c2079e0c48864c93262872d878540, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be1c2079e0c48864c93262872d878540, type: 3}
 --- !u!224 &1372084772 stripped
@@ -9951,7 +9931,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: -22.5, y: -26}
+  m_Spacing: {x: -28, y: -30}
   m_Constraint: 2
   m_ConstraintCount: 8
 --- !u!114 &1525000408
@@ -11781,7 +11761,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: -22.5, y: -26}
+  m_Spacing: {x: -28, y: -30}
   m_Constraint: 2
   m_ConstraintCount: 8
 --- !u!224 &1813786139
@@ -11933,6 +11913,50 @@ MonoBehaviour:
   rowIndex: 0
   colIndex: 0
   stoneId: 0
+--- !u!1 &1848936211
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1848936212}
+  - component: {fileID: 1848936213}
+  m_Layer: 0
+  m_Name: InputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1848936212
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848936211}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2112530801}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1848936213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848936211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fff25acb6305fe409bafc0a3b9e973b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1860183580
 GameObject:
   m_ObjectHideFlags: 0
@@ -13376,6 +13400,7 @@ Transform:
   m_Children:
   - {fileID: 1179095008}
   - {fileID: 1602125908}
+  - {fileID: 1848936212}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
