@@ -6,7 +6,7 @@ using System.IO;
 public class StoneEditorTool : EditorWindow
 {
     private int cellSize = 40;
-    private Stone[] stones = new Stone[5];
+    private Stone[] stones = new Stone[6];
     private Stone selectedStone;
     private List<List<Cell[,]>> gridsByLevel = new List<List<Cell[,]>>();
     private int selectedGrid = 0;
@@ -34,15 +34,17 @@ public class StoneEditorTool : EditorWindow
         Sprite stone3Sprite = Resources.Load<Sprite>("Sprites/Blue");
         Sprite stone4Sprite = Resources.Load<Sprite>("Sprites/Yellow");
         Sprite stone5Sprite = Resources.Load<Sprite>("Sprites/Orange");
+        Sprite stone0Sprite = Resources.Load<Sprite>("Sprites/Empty");
 
-        stones[0] = new Stone(1, Color.red, stone1Sprite);
-        stones[1] = new Stone(2, Color.green, stone2Sprite);
-        stones[2] = new Stone(3, Color.blue, stone3Sprite);
-        stones[3] = new Stone(4, Color.yellow, stone4Sprite);
-        stones[4] = new Stone(5, Color.cyan, stone5Sprite);
+        stones[1] = new Stone(1, Color.red, stone1Sprite);
+        stones[2] = new Stone(2, Color.green, stone2Sprite);
+        stones[3] = new Stone(3, Color.blue, stone3Sprite);
+        stones[4] = new Stone(4, Color.yellow, stone4Sprite);
+        stones[5] = new Stone(5, Color.cyan, stone5Sprite);
+        stones[0] = new Stone(0, Color.gray, stone0Sprite);
 
         // Add grids for each level
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < levelOptions.Length; i++)
         {
             gridsByLevel.Add(CreateEmptyLevel());
         }
@@ -188,7 +190,7 @@ public class StoneEditorTool : EditorWindow
         GUILayout.BeginHorizontal();
         foreach (Stone stone in stones)
         {
-            if (GUILayout.Button(stone.Sprite.texture, GUILayout.Width(cellSize), GUILayout.Height(cellSize)))
+            if (GUILayout.Button(stone.Sprite?.texture, GUILayout.Width(cellSize), GUILayout.Height(cellSize)))
             {
                 // Handle stone button click
                 OnStoneButtonClick(stone);
@@ -196,6 +198,8 @@ public class StoneEditorTool : EditorWindow
         }
         GUILayout.EndHorizontal();
     }
+
+
 
     private void OnStoneButtonClick(Stone stone)
     {
@@ -347,7 +351,7 @@ public class StoneEditorTool : EditorWindow
 
                     Cell cell = new Cell(id, sprite, rowIndex, colIndex);
 
-                    grid[colIndex, rowIndex] = cell;
+                    grid[rowIndex, colIndex] = cell;
                 }
 
                 levelData.Add(grid);

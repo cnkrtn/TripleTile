@@ -10,12 +10,7 @@ namespace Managers
        // public int levelIndex; 
         public List<GameObject> gridLayers; // List of grid layers representing the grids for the level
 
-
-        private void OnEnable()
-        {
-           
-        }
-        
+       
 
         private string GetSavePathForLevel(int levelIndex)
         {
@@ -68,12 +63,7 @@ namespace Managers
                 Debug.LogWarning($"Save data not found for Level {levelIndex + 1} at path: {loadPath}");
             }
         }
-
-        private Sprite LoadSpriteByName(string spriteName)
-        {
-            string spritePath = "Sprites/" + spriteName;
-            return Resources.Load<Sprite>(spritePath);
-        }
+        
 
         private void ApplyGridDataForLevel(List<Cell[,]> levelData)
         {

@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
-    [SerializeField] private int rowIndex;
-    [SerializeField] private  int colIndex;
+    [SerializeField] public int rowIndex;
+    [SerializeField] public  int colIndex;
     public int stoneId;
     
     
