@@ -43,20 +43,39 @@ public class GridStone : MonoBehaviour
         if (gridLayerId + 1 >= _levelLoader.gridLayers.Count) return;
         
         var gridLayerAbove = _levelLoader.gridLayers[gridLayerId + 1];
-            
-        for (var i = 0; i < gridLayerAbove.transform.childCount; i++)
+        if (gridLayerId % 2 == 0)
         {
-            var cell = gridLayerAbove.transform.GetChild(i).GetComponent<GridCell>();
-            if ((cell.rowIndex == rowIndex && cell.colIndex == colIndex) || (cell.rowIndex == rowIndex + 1 &&
-                                                                             cell.colIndex == colIndex)
-                                                                         || (cell.rowIndex == rowIndex &&
-                                                                             cell.colIndex == colIndex + 1) ||
-                                                                         (cell.rowIndex == rowIndex + 1 &&
-                                                                          cell.colIndex == colIndex + 1))
+            for (var i = 0; i < gridLayerAbove.transform.childCount; i++)
             {
-                cellsToCheck.Add(cell);
+                var cell = gridLayerAbove.transform.GetChild(i).GetComponent<GridCell>();
+                if ((cell.rowIndex == rowIndex && cell.colIndex == colIndex) || (cell.rowIndex == rowIndex  +1 &&
+                                                                                 cell.colIndex == colIndex)
+                                                                             || (cell.rowIndex == rowIndex &&
+                                                                                 cell.colIndex == colIndex - 1) ||
+                                                                             (cell.rowIndex == rowIndex + 1 &&
+                                                                              cell.colIndex == colIndex - 1))
+                {
+                    cellsToCheck.Add(cell);
+                }
             }
         }
+        else
+        {
+            for (var i = 0; i < gridLayerAbove.transform.childCount; i++)
+            {
+                var cell = gridLayerAbove.transform.GetChild(i).GetComponent<GridCell>();
+                if ((cell.rowIndex == rowIndex && cell.colIndex == colIndex) || (cell.rowIndex == rowIndex - 1 &&
+                                                                                 cell.colIndex == colIndex)
+                                                                             || (cell.rowIndex == rowIndex &&
+                                                                                 cell.colIndex == colIndex + 1) ||
+                                                                             (cell.rowIndex == rowIndex - 1 &&
+                                                                              cell.colIndex == colIndex + 1))
+                {
+                    cellsToCheck.Add(cell);
+                }
+            }
+        }
+      
         
         foreach (var cell in cellsToCheck)
         {
