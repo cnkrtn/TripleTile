@@ -273,7 +273,7 @@ public class StoneEditorTool : EditorWindow
 
    
 
-   private void SaveGridsForLevel(int levelIndex)
+    private void SaveGridsForLevel(int levelIndex)
     {
         if (levelIndex >= gridsByLevel.Count)
         {
@@ -284,8 +284,9 @@ public class StoneEditorTool : EditorWindow
         List<Cell[,]> levelData = gridsByLevel[levelIndex];
         List<SerializableGrid> serializedGrids = new List<SerializableGrid>();
 
-        foreach (Cell[,] grid in levelData)
+        for (int gridIndex = 0; gridIndex < levelData.Count; gridIndex++)
         {
+            Cell[,] grid = levelData[gridIndex];
             List<SerializableCell> serializedCells = new List<SerializableCell>();
 
             for (int row = 0; row < 8; row++) // Loop through rows (grid size is 8x8)
@@ -297,7 +298,7 @@ public class StoneEditorTool : EditorWindow
                 }
             }
 
-            serializedGrids.Add(new SerializableGrid(serializedCells));
+            serializedGrids.Add(new SerializableGrid(gridIndex, serializedCells));
         }
 
         SerializableLevel serializableLevel = new SerializableLevel(levelIndex, serializedGrids);
@@ -308,6 +309,7 @@ public class StoneEditorTool : EditorWindow
 
         Debug.Log($"Grid data saved for Level {levelIndex + 1} to: {savePath}");
     }
+
 
     private void LoadGridsForLevel(int levelIndex)
     {
