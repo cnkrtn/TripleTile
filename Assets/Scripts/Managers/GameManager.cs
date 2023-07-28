@@ -36,7 +36,7 @@ namespace Managers
                 {
                     var gridCell = grid.transform.GetChild(i).GetComponent<GridCell>();
                     if (gridCell.stoneId <= 0 || gridCell.stoneId >= stones.Count) continue;
-                    var stone = Instantiate(stones[gridCell.stoneId], grid.transform.position, quaternion.identity);
+                    var stone = Instantiate(stones[gridCell.stoneId], gridCell.transform.position, quaternion.identity);
                     stone.SetActive(true);
                     stone.transform.SetParent(gridCell.transform);
                     Debug.Log("Done");

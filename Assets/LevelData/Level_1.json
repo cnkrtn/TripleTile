@@ -185,16 +185,16 @@
                     "SpriteName": "Red"
                 },
                 {
-                    "ID": 0,
+                    "ID": 3,
                     "RowIndex": 6,
                     "ColIndex": 3,
-                    "SpriteName": ""
+                    "SpriteName": "Blue"
                 },
                 {
-                    "ID": 0,
+                    "ID": 3,
                     "RowIndex": 7,
                     "ColIndex": 3,
-                    "SpriteName": ""
+                    "SpriteName": "Blue"
                 },
                 {
                     "ID": 1,
@@ -233,16 +233,16 @@
                     "SpriteName": "Blue"
                 },
                 {
-                    "ID": 0,
+                    "ID": 2,
                     "RowIndex": 6,
                     "ColIndex": 4,
-                    "SpriteName": ""
+                    "SpriteName": "Green"
                 },
                 {
-                    "ID": 0,
+                    "ID": 4,
                     "RowIndex": 7,
                     "ColIndex": 4,
-                    "SpriteName": ""
+                    "SpriteName": "Yellow"
                 },
                 {
                     "ID": 2,
@@ -963,16 +963,16 @@
                     "SpriteName": ""
                 },
                 {
-                    "ID": 3,
+                    "ID": 0,
                     "RowIndex": 6,
                     "ColIndex": 3,
-                    "SpriteName": "Blue"
+                    "SpriteName": "Empty"
                 },
                 {
-                    "ID": 3,
+                    "ID": 0,
                     "RowIndex": 7,
                     "ColIndex": 3,
-                    "SpriteName": "Blue"
+                    "SpriteName": "Empty"
                 },
                 {
                     "ID": 0,
@@ -1011,16 +1011,16 @@
                     "SpriteName": ""
                 },
                 {
-                    "ID": 2,
+                    "ID": 0,
                     "RowIndex": 6,
                     "ColIndex": 4,
-                    "SpriteName": "Green"
+                    "SpriteName": "Empty"
                 },
                 {
-                    "ID": 4,
+                    "ID": 0,
                     "RowIndex": 7,
                     "ColIndex": 4,
-                    "SpriteName": "Yellow"
+                    "SpriteName": "Empty"
                 },
                 {
                     "ID": 0,
