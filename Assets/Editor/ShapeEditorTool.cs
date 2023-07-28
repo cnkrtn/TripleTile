@@ -78,6 +78,92 @@ public class StoneEditorTool : EditorWindow
         return grid;
     }
 
+    private void DrawSaveButton()
+    {
+        if (GUILayout.Button("Save All Levels"))
+        {
+            for (int levelIndex = 0; levelIndex < gridsByLevel.Count; levelIndex++)
+            {
+                SaveGridsForLevel(levelIndex);
+            }
+        }
+    }
+
+    private void DrawClearButtons()
+    {
+        GUILayout.BeginHorizontal();
+
+        if (GUILayout.Button("Clear Grid"))
+        {
+            ClearGrid(selectedLevel,selectedGrid);
+        }
+
+        if (GUILayout.Button("Clear Level"))
+        {
+            ClearLevel(selectedLevel);
+        }
+
+        if (GUILayout.Button("Clear All"))
+        {
+            ClearAllGrids();
+        }
+
+        GUILayout.EndHorizontal();
+    }
+    private void ClearAllGrids()
+    {
+        // Loop through all levels and grids and reset them to empty grids
+        for (int levelIndex = 0; levelIndex < gridsByLevel.Count; levelIndex++)
+        {
+            for (int gridIndex = 0; gridIndex < gridsByLevel[levelIndex].Count; gridIndex++)
+            {
+                ClearGrid(levelIndex, gridIndex);
+            }
+        }
+
+        // Repaint the editor window to reflect the changes
+        Repaint();
+    }
+    private void ClearLevel(int levelIndex)
+    {
+        // Check if the level index is within valid range
+        if (levelIndex < 0 || levelIndex >= gridsByLevel.Count)
+        {
+            Debug.LogError("Invalid level index.");
+            return;
+        }
+
+        // Reset all the grids in the selected level to empty grids
+        for (int gridIndex = 0; gridIndex < gridsByLevel[levelIndex].Count; gridIndex++)
+        {
+            ClearGrid(levelIndex, gridIndex);
+        }
+
+        // Repaint the editor window to reflect the changes
+        Repaint();
+    }
+    private void ClearGrid(int levelIndex, int gridIndex)
+    {
+        // Check if the level and grid are within valid ranges
+        if (levelIndex < 0 || levelIndex >= gridsByLevel.Count || gridIndex < 0 || gridIndex >= gridsByLevel[levelIndex].Count)
+        {
+            Debug.LogError("Invalid level or grid index.");
+            return;
+        }
+
+        // Reset the selected grid to an empty grid with all cells having ID=0 and no sprites
+        Cell[,] grid = gridsByLevel[levelIndex][gridIndex];
+        for (int row = 0; row < 8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                grid[col, row] = new Cell(0, null, col, row);
+            }
+        }
+
+        // Repaint the editor window to reflect the changes
+        Repaint();
+    }
     private void OnGUI()
     {
         GUILayout.Space(10);
@@ -91,6 +177,9 @@ public class StoneEditorTool : EditorWindow
 
         GUILayout.Space(10);
         DrawSaveButton();
+
+        GUILayout.Space(10);
+        DrawClearButtons();
     }
 
     private void DrawButtons()
@@ -182,16 +271,7 @@ public class StoneEditorTool : EditorWindow
         }
     }
 
-    private void DrawSaveButton()
-    {
-        if (GUILayout.Button("Save All Levels"))
-        {
-            for (int levelIndex = 0; levelIndex < gridsByLevel.Count; levelIndex++)
-            {
-                SaveGridsForLevel(levelIndex);
-            }
-        }
-    }
+   
 
    private void SaveGridsForLevel(int levelIndex)
     {
