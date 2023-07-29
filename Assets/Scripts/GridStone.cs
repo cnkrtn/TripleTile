@@ -11,7 +11,7 @@ public class GridStone : MonoBehaviour
     
     public List<GridCell> cellsToCheck;
     public List<GridStone> stonesToCheck;
-    
+    public int stoneID;
     private LevelLoader _levelLoader;
     [SerializeField] private Image image;
 

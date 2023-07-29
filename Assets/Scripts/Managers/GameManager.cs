@@ -13,6 +13,7 @@ namespace Managers
         private LevelLoader _levelLoader;
         public List<GameObject> gridLayers;
         public List<GameObject> stones;
+       
         
         // Start is called before the first frame update
         void Awake()

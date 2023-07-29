@@ -54,6 +54,7 @@ MonoBehaviour:
   isClickable: 0
   cellsToCheck: []
   stonesToCheck: []
+  stoneID: 4
   image: {fileID: 1012688205739693109}
 --- !u!61 &3586715406623256750
 BoxCollider2D:

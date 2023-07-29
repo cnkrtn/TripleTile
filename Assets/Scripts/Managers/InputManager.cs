@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -6,6 +7,12 @@ namespace Managers
 {
     public class InputManager : MonoBehaviour
     {
+        private PlayerHandManager _playerHandManager;
+        private void Awake()
+        {
+            _playerHandManager = FindObjectOfType<PlayerHandManager>();
+        }
+
         private void Update()
         {
             if (Input.GetMouseButtonDown(0))
@@ -31,9 +38,14 @@ namespace Managers
                     if (gridStone == null) continue;
                     if (!gridStone.isClickable) return;
                     Debug.Log("Hit successful: GridStone found!");
+                    _playerHandManager.MoveToPlayerHand(gridStone);
                     break;
+                    
+                    
                 }
             }
         }
+
+        
     }
 }
