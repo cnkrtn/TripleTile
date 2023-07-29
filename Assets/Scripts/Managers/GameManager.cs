@@ -9,7 +9,7 @@ namespace Managers
     public class GameManager : MonoBehaviour
     {
 
-        public int levelIndex;
+        public int levelIndex,totalScore;
         public List<GameObject> gridLayers;
         public List<GameObject> stones;
         private LevelLoader _levelLoader;
@@ -18,6 +18,7 @@ namespace Managers
        [SerializeField] public int totalStoneCount;
        
        private const string LevelIndexKey = "LevelIndex"; 
+       private const string ScoreIndexKey = "ScoreIndex";
         
        
         void Awake()
@@ -25,14 +26,21 @@ namespace Managers
             
             _levelLoader = FindObjectOfType<LevelLoader>();
             _uiManager = FindObjectOfType<UIManager>();
-            levelIndex = PlayerPrefs.GetInt(LevelIndexKey, 0);
+            LoadData();
             gridLayers = _levelLoader.gridLayers;
+        }
+
+        private void LoadData()
+        {
+            levelIndex = PlayerPrefs.GetInt(LevelIndexKey, 0);
+            totalScore = PlayerPrefs.GetInt(ScoreIndexKey, 0);
         }
 
         private void Start()
         {
             _levelLoader.LoadLevel(levelIndex);
             SetTheStones();
+            _uiManager.totalPieceCount = totalStoneCount;
 
         }
 
@@ -74,6 +82,12 @@ namespace Managers
             {
                 levelIndex = 0;}
             PlayerPrefs.SetInt(LevelIndexKey, levelIndex);
+            PlayerPrefs.Save();
+        }
+
+        public void SaveTotalScore()
+        {
+            PlayerPrefs.SetInt(ScoreIndexKey, totalScore);
             PlayerPrefs.Save();
         }
        

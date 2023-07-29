@@ -113,10 +113,10 @@
                     "SpriteName": ""
                 },
                 {
-                    "ID": 0,
+                    "ID": 1,
                     "RowIndex": 2,
                     "ColIndex": 2,
-                    "SpriteName": ""
+                    "SpriteName": "Red"
                 },
                 {
                     "ID": 0,
@@ -251,10 +251,10 @@
                     "SpriteName": ""
                 },
                 {
-                    "ID": 0,
+                    "ID": 1,
                     "RowIndex": 1,
                     "ColIndex": 5,
-                    "SpriteName": ""
+                    "SpriteName": "Red"
                 },
                 {
                     "ID": 0,
@@ -371,10 +371,10 @@
                     "SpriteName": ""
                 },
                 {
-                    "ID": 0,
+                    "ID": 1,
                     "RowIndex": 5,
                     "ColIndex": 7,
-                    "SpriteName": ""
+                    "SpriteName": "Red"
                 },
                 {
                     "ID": 0,
@@ -538,16 +538,16 @@
                     "SpriteName": ""
                 },
                 {
-                    "ID": 0,
+                    "ID": 5,
                     "RowIndex": 0,
                     "ColIndex": 3,
-                    "SpriteName": ""
+                    "SpriteName": "Orange"
                 },
                 {
-                    "ID": 0,
+                    "ID": 5,
                     "RowIndex": 1,
                     "ColIndex": 3,
-                    "SpriteName": ""
+                    "SpriteName": "Orange"
                 },
                 {
                     "ID": 0,
@@ -586,10 +586,10 @@
                     "SpriteName": ""
                 },
                 {
-                    "ID": 0,
+                    "ID": 5,
                     "RowIndex": 0,
                     "ColIndex": 4,
-                    "SpriteName": ""
+                    "SpriteName": "Orange"
                 },
                 {
                     "ID": 0,
@@ -927,16 +927,16 @@
                     "SpriteName": ""
                 },
                 {
-                    "ID": 0,
+                    "ID": 4,
                     "RowIndex": 0,
                     "ColIndex": 3,
-                    "SpriteName": ""
+                    "SpriteName": "Yellow"
                 },
                 {
-                    "ID": 0,
+                    "ID": 4,
                     "RowIndex": 1,
                     "ColIndex": 3,
-                    "SpriteName": ""
+                    "SpriteName": "Yellow"
                 },
                 {
                     "ID": 0,
@@ -981,10 +981,10 @@
                     "SpriteName": ""
                 },
                 {
-                    "ID": 0,
+                    "ID": 4,
                     "RowIndex": 1,
                     "ColIndex": 4,
-                    "SpriteName": ""
+                    "SpriteName": "Yellow"
                 },
                 {
                     "ID": 0,
