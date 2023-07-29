@@ -48,15 +48,22 @@ public class GridStone : MonoBehaviour
         IsItClickable();
     }
 
-    private void IsItClickable()
+    public void IsItClickable()
     {
-        if (stonesToCheck.Count>0) return;
-        isClickable = true;
-        image.color = Color.white;
-        
+        if (stonesToCheck.Count <= 0)
+        {
+            isClickable = true;
+            image.color = Color.white;
+        }
+        else
+        {
+            isClickable = false;
+            image.color = Color.gray;
+            
+        }
     }
 
-    private void AddToCellsToCheck()
+    public void AddToCellsToCheck()
     {
         var rowIndex = transform.GetComponentInParent<GridCell>().rowIndex;
         var colIndex = transform.GetComponentInParent<GridCell>().colIndex;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Managers
 {
@@ -18,39 +19,7 @@ namespace Managers
             _gameManager = FindObjectOfType<GameManager>();
         }
 
-        public void MoveToPlayerHand(GridStone gridStone)
-        {
-            if(playerHandStones.Count>=playerHandSlots.Count) return;
-            
-            for (var i = 0; i < playerHandSlots.Count; i++)
-            {
-                var slot = playerHandSlots[i].GetComponent<Slot>();
-                if (!slot.isOccupied)
-                {
-                    AddToList(gridStone, i);
-                    previousSlotsId = 0;
-                    Debug.Log("Section 1 Passed!");
-                    return;
-                }
-
-                if (previousSlotsId == gridStone.stoneID)
-                {
-                   
-                    AddToList(gridStone, i);
-                    Debug.Log("Section 2 Passed!");
-                    return;
-                }
-
-                if (gridStone.stoneID == slot.occupyingId)
-                {
-                    previousSlotsId = slot.occupyingId;
-                    Debug.Log("Section 3 Passed!");
-                }
-
-            }
-
-              
-        }
+        
 
          private void MoveStones()
             {
@@ -109,7 +78,39 @@ namespace Managers
                 MoveStones();
             }
         }
+        public void MoveToPlayerHand(GridStone gridStone)
+        {
+            if(playerHandStones.Count>=playerHandSlots.Count) return;
+            
+            for (var i = 0; i < playerHandSlots.Count; i++)
+            {
+                var slot = playerHandSlots[i].GetComponent<Slot>();
+                if (!slot.isOccupied)
+                {
+                    AddToList(gridStone, i);
+                    previousSlotsId = 0;
+                    Debug.Log("Section 1 Passed!");
+                    return;
+                }
 
+                if (previousSlotsId == gridStone.stoneID)
+                {
+                   
+                    AddToList(gridStone, i);
+                    Debug.Log("Section 2 Passed!");
+                    return;
+                }
+
+                if (gridStone.stoneID == slot.occupyingId)
+                {
+                    previousSlotsId = slot.occupyingId;
+                    Debug.Log("Section 3 Passed!");
+                }
+
+            }
+
+              
+        }
         public void ReturnTheLastPieceToOrigin()
         {
             if(lastMovedPiece == null) return;
@@ -122,6 +123,50 @@ namespace Managers
             playerHandStones.Remove(lastMovedPiece.GetComponent<GridStone>());
             lastMovedPiece = null;
             lastPieceGridObject = null;
+        }
+
+        public void Shuffle()
+        {
+            List<RectTransform> stonesToShuffle = new();
+            foreach (var slot in _gameManager.slotsToShuffle)
+            {
+                var stone = (RectTransform)slot.transform.GetChild(0);
+                stone.SetParent(null);
+                stonesToShuffle.Add(stone);
+            }
+            // Shuffle the list of child objects with grandchildren
+            ShuffleList(stonesToShuffle);
+
+            // Iterate through the parent game objects and reassign their UI children
+            for (int i = 0; i < _gameManager.slotsToShuffle.Count; i++)
+            {
+                stonesToShuffle[i].transform.SetParent(_gameManager.slotsToShuffle[i]);
+
+                
+               
+            }
+            
+            foreach (var stone in stonesToShuffle)
+            {
+                var gridStone = stone.GetComponent<GridStone>();
+                gridStone.cellsToCheck.Clear();
+                gridStone.stonesToCheck.Clear();
+                gridStone.AddToCellsToCheck();
+                gridStone.IsItClickable();
+                stone.localPosition = Vector3.zero;
+            }
+          
+        }
+        
+        private void ShuffleList(List<RectTransform> list)
+        {
+            var n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                var k = Random.Range(0, n + 1);
+                (list[k], list[n]) = (list[n], list[k]);
+            }
         }
     }
 }
