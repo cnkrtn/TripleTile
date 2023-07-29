@@ -8,9 +8,9 @@ namespace Managers
     {
         public List<GridStone> playerHandStones;
         public List<RectTransform> playerHandSlots;
+        [SerializeField] private RectTransform lastPieceGridObject,lastMovedPiece;
        [SerializeField] private int previousSlotsId;
-
-        [SerializeField] private float slideDuration, moveDuration, destroyDuration;
+       [SerializeField] private float slideDuration, moveDuration, destroyDuration;
 
 
         public void MoveToPlayerHand(GridStone gridStone)
@@ -22,7 +22,7 @@ namespace Managers
                 var slot = playerHandSlots[i].GetComponent<Slot>();
                 if (!slot.isOccupied)
                 {
-                    AddToList(gridStone, i, slot);
+                    AddToList(gridStone, i);
                     previousSlotsId = 0;
                     Debug.Log("Section 1 Passed!");
                     return;
@@ -31,7 +31,7 @@ namespace Managers
                 if (previousSlotsId == gridStone.stoneID)
                 {
                    
-                    AddToList(gridStone, i, slot);
+                    AddToList(gridStone, i);
                     
                     
                     Debug.Log("Section 2 Passed!");
@@ -49,7 +49,7 @@ namespace Managers
               
         }
 
-         private void MoveRest()
+         private void MoveStones()
             {
                 for (int j = 0; j < playerHandStones.Count; j++)
                 {
@@ -58,7 +58,7 @@ namespace Managers
                     var stoneObject = (RectTransform)playerHandStones[j].transform;
                     var slotToMove = playerHandSlots[j].GetComponent<Slot>();
                     stoneObject.SetParent(playerHandSlots[j]);
-                    stoneObject.DOLocalMove(Vector3.zero, slideDuration); // Use DOLocalMove instead of DOMove
+                    stoneObject.DOLocalMove(Vector3.zero, slideDuration); 
                     slotToMove.occupyingId = playerHandStones[j].stoneID;
                     slotToMove.isOccupied = true;
                 }  
@@ -67,12 +67,16 @@ namespace Managers
         
 
 
-        private void AddToList(GridStone gridStone, int i, Slot slot)
+        private void AddToList(GridStone gridStone, int i)
         {
             playerHandStones.Insert(i,gridStone);
+            gridStone.isClickable = false;
+            lastMovedPiece = (RectTransform)gridStone.transform;
+            lastPieceGridObject = (RectTransform)lastMovedPiece.parent.transform;
             
-            MoveRest();
+            MoveStones();
             MergeAndDestroy();
+            EventManager.OnStoneAddedToPlayerHand?.Invoke();
             
             
         }
@@ -103,10 +107,24 @@ namespace Managers
                     // playerHandStones.Remove(stone2);
                     // playerHandStones.Remove(stone3);
                
-                    MoveRest();
+                    MoveStones();
                   
                 }
             }
+        }
+
+        public void ReturnTheLastPieceToOrigin()
+        {
+            if(lastMovedPiece == null) return;
+            var slotToMoveFrom = lastMovedPiece.parent.transform.GetComponent<Slot>();
+            lastMovedPiece.SetParent(lastPieceGridObject);
+            lastMovedPiece.DOLocalMove(Vector3.zero, slideDuration); 
+            slotToMoveFrom.occupyingId = 0;
+            slotToMoveFrom.isOccupied = false;
+            lastMovedPiece.GetComponent<GridStone>().isClickable = true;
+            playerHandStones.Remove(lastMovedPiece.GetComponent<GridStone>());
+            lastMovedPiece = null;
+            lastPieceGridObject = null;
         }
     }
 }

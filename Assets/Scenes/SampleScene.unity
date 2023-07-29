@@ -4193,6 +4193,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StoneBlue
       objectReference: {fileID: 0}
+    - target: {fileID: 6050603953405836029, guid: 5dfffcab9e26efe4fa5be45f07dd1e59, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5dfffcab9e26efe4fa5be45f07dd1e59, type: 3}
 --- !u!224 &775468499 stripped

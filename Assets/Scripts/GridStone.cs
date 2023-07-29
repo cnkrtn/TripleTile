@@ -15,6 +15,27 @@ public class GridStone : MonoBehaviour
     private LevelLoader _levelLoader;
     [SerializeField] private Image image;
 
+
+    private void OnEnable()
+    {
+        EventManager.OnStoneAddedToPlayerHand += OnStoneAddedToPlayerHand;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnStoneAddedToPlayerHand -= OnStoneAddedToPlayerHand;
+    }
+
+    private void OnStoneAddedToPlayerHand()
+    {
+        if (transform.parent.GetComponent<GridCell>() == null) return;
+        cellsToCheck.Clear();
+        stonesToCheck.Clear();
+        AddToCellsToCheck();
+        IsItClickable();
+
+    }
+
     private void Awake()
     {
         _levelLoader = FindObjectOfType<LevelLoader>();
