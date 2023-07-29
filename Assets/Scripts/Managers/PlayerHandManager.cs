@@ -23,7 +23,7 @@ namespace Managers
 
          private void MoveStones()
             {
-                for (int j = 0; j < playerHandStones.Count; j++)
+                for (var j = 0; j < playerHandStones.Count; j++)
                 {
                     if (playerHandStones[j] == null) continue;
                     
@@ -111,7 +111,7 @@ namespace Managers
 
               
         }
-        public void ReturnTheLastPieceToOrigin()
+        public void Undo()
         {
             if(lastMovedPiece == null) return;
             var slotToMoveFrom = lastMovedPiece.parent.transform.GetComponent<Slot>();
@@ -127,6 +127,8 @@ namespace Managers
 
         public void Shuffle()
         {
+            _gameManager.slotsToShuffle.Clear();
+            _gameManager.AddToListToShuffle();
             List<RectTransform> stonesToShuffle = new();
             foreach (var slot in _gameManager.slotsToShuffle)
             {
@@ -134,16 +136,13 @@ namespace Managers
                 stone.SetParent(null);
                 stonesToShuffle.Add(stone);
             }
-            // Shuffle the list of child objects with grandchildren
+           
             ShuffleList(stonesToShuffle);
 
-            // Iterate through the parent game objects and reassign their UI children
+          
             for (int i = 0; i < _gameManager.slotsToShuffle.Count; i++)
             {
                 stonesToShuffle[i].transform.SetParent(_gameManager.slotsToShuffle[i]);
-
-                
-               
             }
             
             foreach (var stone in stonesToShuffle)

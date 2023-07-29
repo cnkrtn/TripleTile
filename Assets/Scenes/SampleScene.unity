@@ -6433,7 +6433,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1702019991}
         m_TargetAssemblyTypeName: Managers.PlayerHandManager, Assembly-CSharp
-        m_MethodName: ReturnTheLastPieceToOrigin
+        m_MethodName: Undo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11892,7 +11892,10 @@ MonoBehaviour:
   - {fileID: 1372084773}
   - {fileID: 1035135861}
   slotsToShuffle: []
-  allSlots: []
+  allSlots:
+  - {fileID: 1525000406}
+  - {fileID: 261811657}
+  - {fileID: 1813786139}
 --- !u!1 &1606516394
 GameObject:
   m_ObjectHideFlags: 0

@@ -49,7 +49,7 @@ namespace Managers
             levelIndex = PlayerPrefs.GetInt(LevelIndexKey, 0);
             totalScore = PlayerPrefs.GetInt(ScoreIndexKey, 0);
         }
-        private void AddToListToShuffle()
+        public void AddToListToShuffle()
         {
             foreach (RectTransform parent in allSlots)
             {
