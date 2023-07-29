@@ -1062,6 +1062,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fdd85220d547d439bba3920c299520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOccupied: 0
+  occupyingId: 0
 --- !u!1 &175641744
 GameObject:
   m_ObjectHideFlags: 0
@@ -1307,6 +1309,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fdd85220d547d439bba3920c299520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOccupied: 0
+  occupyingId: 0
 --- !u!1 &205278740
 GameObject:
   m_ObjectHideFlags: 0
@@ -4342,6 +4346,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fdd85220d547d439bba3920c299520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOccupied: 0
+  occupyingId: 0
 --- !u!1 &784136778
 GameObject:
   m_ObjectHideFlags: 0
@@ -5266,6 +5272,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fdd85220d547d439bba3920c299520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOccupied: 0
+  occupyingId: 0
 --- !u!1 &858929525
 GameObject:
   m_ObjectHideFlags: 0
@@ -7401,6 +7409,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fdd85220d547d439bba3920c299520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOccupied: 0
+  occupyingId: 0
 --- !u!1 &1174280824
 GameObject:
   m_ObjectHideFlags: 0
@@ -9633,6 +9643,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fdd85220d547d439bba3920c299520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOccupied: 0
+  occupyingId: 0
 --- !u!1 &1490453306
 GameObject:
   m_ObjectHideFlags: 0
@@ -10301,6 +10313,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fdd85220d547d439bba3920c299520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOccupied: 0
+  occupyingId: 0
 --- !u!1 &1583701599
 GameObject:
   m_ObjectHideFlags: 0
@@ -11098,6 +11112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fdd85220d547d439bba3920c299520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOccupied: 0
+  occupyingId: 0
 --- !u!1 &1687041948
 GameObject:
   m_ObjectHideFlags: 0
@@ -11256,6 +11272,10 @@ MonoBehaviour:
   - {fileID: 201879645}
   - {fileID: 783482788}
   - {fileID: 1686110556}
+  previousSlotsId: 0
+  slideDuration: 0.5
+  moveDuration: 1
+  destroyDuration: 0
 --- !u!1 &1712230345
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,12 +15,14 @@ namespace Managers
 
         public void MoveToPlayerHand(GridStone gridStone)
         {
+            if(playerHandStones.Count>=playerHandSlots.Count) return;
+            
             for (var i = 0; i < playerHandSlots.Count; i++)
             {
                 var slot = playerHandSlots[i].GetComponent<Slot>();
                 if (!slot.isOccupied)
                 {
-                    Move(gridStone, i, slot);
+                    AddToList(gridStone, i, slot);
                     previousSlotsId = 0;
                     Debug.Log("Section 1 Passed!");
                     return;
@@ -28,8 +30,9 @@ namespace Managers
 
                 if (previousSlotsId == gridStone.stoneID)
                 {
-
-                    MoveRest(i,true,gridStone,slot);
+                   
+                    AddToList(gridStone, i, slot);
+                    
                     
                     Debug.Log("Section 2 Passed!");
                     return;
@@ -46,41 +49,64 @@ namespace Managers
               
         }
 
-        private void MoveRest(int i,bool moveRight,GridStone gridStone, Slot slot)
-        {
-            if (moveRight)
+         private void MoveRest()
             {
-                for (var j = playerHandSlots.Count-1 ; j >= i ; j--)
+                for (int j = 0; j < playerHandStones.Count; j++)
                 {
-                    if (playerHandSlots[j].transform.childCount == 0) continue;
-                  
-                    var stoneObject = (RectTransform)playerHandSlots[j].transform.GetChild(0);
-                    var nextSlot = playerHandSlots[j + 1].GetComponent<Slot>();
-                    if (stoneObject == null) continue;
-                    stoneObject.SetParent(playerHandSlots[j + 1]);
-                    stoneObject.DOMove(playerHandSlots[j + 1].position, slideDuration);
-                    nextSlot.occupyingId = stoneObject.GetComponent<GridStone>().stoneID;
-                    nextSlot.isOccupied = true;
-
+                    if (playerHandStones[j] == null) continue;
                     
-                }
-                Move(gridStone, i, slot);
+                    var stoneObject = (RectTransform)playerHandStones[j].transform;
+                    var slotToMove = playerHandSlots[j].GetComponent<Slot>();
+                    stoneObject.SetParent(playerHandSlots[j]);
+                    stoneObject.DOLocalMove(Vector3.zero, slideDuration); // Use DOLocalMove instead of DOMove
+                    slotToMove.occupyingId = playerHandStones[j].stoneID;
+                    slotToMove.isOccupied = true;
+                }  
             }
-            else
-            {
-                
-            }
-          
+            
+        
+
+
+        private void AddToList(GridStone gridStone, int i, Slot slot)
+        {
+            playerHandStones.Insert(i,gridStone);
+            
+            MoveRest();
+            MergeAndDestroy();
+            
+            
         }
 
-
-        private void Move(GridStone gridStone, int i, Slot slot)
+        private void MergeAndDestroy()
         {
-            gridStone.transform.SetParent(playerHandSlots[i]);
-            var rectTransform = (RectTransform)gridStone.transform;
-            rectTransform.DOMove(slot.transform.position, moveDuration);
-            slot.occupyingId = gridStone.stoneID;
-            slot.isOccupied = true;
+            if (playerHandStones.Count < 2) return;
+            for (var a = 0; a < playerHandStones.Count - 2; a++)
+            {
+                Debug.Log("!!!!");
+                var stone1 = playerHandStones[a].GetComponent<GridStone>();
+                var stone2 = playerHandStones[a + 1].GetComponent<GridStone>();
+                var stone3 = playerHandStones[a + 2].GetComponent<GridStone>();
+
+
+               
+                if (stone1.stoneID == stone2.stoneID && stone1.stoneID == stone3.stoneID)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Destroy(playerHandSlots[a + i].GetChild(0).gameObject);
+                        playerHandStones.Remove(playerHandSlots[a + i].GetComponentInChildren<GridStone>());
+                        playerHandSlots[a + i].GetComponent<Slot>().isOccupied = false;
+                        playerHandSlots[a + i].GetComponent<Slot>().occupyingId = 0;
+                    }
+                   
+                    // playerHandStones.Remove(stone1);
+                    // playerHandStones.Remove(stone2);
+                    // playerHandStones.Remove(stone3);
+               
+                    MoveRest();
+                  
+                }
+            }
         }
     }
 }

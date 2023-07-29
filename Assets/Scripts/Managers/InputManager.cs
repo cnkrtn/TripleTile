@@ -37,7 +37,9 @@ namespace Managers
                     var gridStone = result.gameObject.GetComponentInParent<GridStone>();
                     if (gridStone == null) continue;
                     if (!gridStone.isClickable) return;
+                    
                     Debug.Log("Hit successful: GridStone found!");
+                    
                     _playerHandManager.MoveToPlayerHand(gridStone);
                     break;
                     
