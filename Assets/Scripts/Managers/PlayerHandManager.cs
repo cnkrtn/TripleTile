@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -8,10 +9,14 @@ namespace Managers
     {
         public List<GridStone> playerHandStones;
         public List<RectTransform> playerHandSlots;
-        [SerializeField] private RectTransform lastPieceGridObject,lastMovedPiece;
-       [SerializeField] private int previousSlotsId;
-       [SerializeField] private float slideDuration, moveDuration, destroyDuration;
-
+        [SerializeField] private RectTransform lastPieceGridObject,lastMovedPiece; 
+        [SerializeField] private int previousSlotsId;
+        [SerializeField] private float slideDuration, moveDuration, destroyDuration;
+        private GameManager _gameManager;
+        private void Awake()
+        {
+            _gameManager = FindObjectOfType<GameManager>();
+        }
 
         public void MoveToPlayerHand(GridStone gridStone)
         {
@@ -32,8 +37,6 @@ namespace Managers
                 {
                    
                     AddToList(gridStone, i);
-                    
-                    
                     Debug.Log("Section 2 Passed!");
                     return;
                 }
@@ -92,24 +95,18 @@ namespace Managers
                 var stone3 = playerHandStones[a + 2].GetComponent<GridStone>();
 
 
-               
-                if (stone1.stoneID == stone2.stoneID && stone1.stoneID == stone3.stoneID)
+                if (stone1.stoneID != stone2.stoneID || stone1.stoneID != stone3.stoneID) continue;
+                for (int i = 0; i < 3; i++)
                 {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        Destroy(playerHandSlots[a + i].GetChild(0).gameObject);
-                        playerHandStones.Remove(playerHandSlots[a + i].GetComponentInChildren<GridStone>());
-                        playerHandSlots[a + i].GetComponent<Slot>().isOccupied = false;
-                        playerHandSlots[a + i].GetComponent<Slot>().occupyingId = 0;
-                    }
-                   
-                    // playerHandStones.Remove(stone1);
-                    // playerHandStones.Remove(stone2);
-                    // playerHandStones.Remove(stone3);
-               
-                    MoveStones();
-                  
+                    Destroy(playerHandSlots[a + i].GetChild(0).gameObject);
+                    _gameManager.CheckTotalStoneCount();
+                    playerHandStones.Remove(playerHandSlots[a + i].GetComponentInChildren<GridStone>());
+                    playerHandSlots[a + i].GetComponent<Slot>().isOccupied = false;
+                    playerHandSlots[a + i].GetComponent<Slot>().occupyingId = 0;
                 }
+                    
+               
+                MoveStones();
             }
         }
 

@@ -8,7 +8,7 @@ namespace Managers
     {
         [Header("Level Data")]
        // public int levelIndex; 
-        public List<GameObject> gridLayers; // List of grid layers representing the grids for the level
+        public List<GameObject> gridLayers; 
 
        
 
@@ -36,7 +36,7 @@ namespace Managers
 
                 foreach (SerializableGrid serializedGrid in serializableLevel.Grids)
                 {
-                    int rows = 8; // Assuming the grid size is always 8x8
+                    int rows = 8; 
                     int cols = 8;
 
                     Cell[,] grid = new Cell[cols, rows];
@@ -93,7 +93,7 @@ namespace Managers
                     if (gridCellTransform != null)
                     {
                         GridCell gridCell = gridCellTransform.GetComponent<GridCell>();
-                        gridCell.stoneId = cell.ID; // Save the Stone ID in the GridCell component.
+                        gridCell.stoneId = cell.ID; 
                     }
                 }
             }
@@ -101,7 +101,7 @@ namespace Managers
             Debug.Log($"Grid data applied to GridLayer: {gridLayer.name}.");
         }
 
-        // Call this method to load the level at the specified index.
+        
         public void LoadLevel(int levelIndex)
         {
             LoadGridsForLevel(levelIndex);
