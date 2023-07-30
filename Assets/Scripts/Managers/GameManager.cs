@@ -38,10 +38,6 @@ namespace Managers
 
         private void Start()
         {
-            if (modeIndex != 0)
-            {
-                
-            }
             _levelLoader.LoadLevel(levelIndex);
             SetTheStones();
             _uiManager.totalPieceCount = totalStoneCount;

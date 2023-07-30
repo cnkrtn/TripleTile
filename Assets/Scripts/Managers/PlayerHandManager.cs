@@ -37,7 +37,7 @@ namespace Managers
                  //     slotToMoveFrom.isOccupied = false;
                  // }
                  stoneObject.SetParent(playerHandSlots[j]);
-                 stoneObject.DOLocalMove(Vector3.zero, slideDuration); 
+                 stoneObject.DOLocalMove(Vector3.zero, slideDuration).SetEase(Ease.InBack,0.5f,0.5f); 
                  slotToMove.occupyingId = playerHandStones[j].stoneID;
                  slotToMove.isOccupied = true;
              }
@@ -81,7 +81,7 @@ namespace Managers
                 for (int i = 0; i < 3; i++)
                 {
                     Destroy(playerHandSlots[a + i].GetChild(0).gameObject,1f);
-                    playerHandSlots[a + i].GetChild(0).transform.DOScale(Vector3.zero, 0.5f).SetDelay(0.5f);
+                    playerHandSlots[a + i].GetChild(0).transform.DOScale(Vector3.zero, 0.5f).SetDelay(0.5f).SetEase(Ease.InBack,2.5f,0.5f);
                     _gameManager.CheckTotalStoneCount();
                     playerHandStones.Remove(playerHandSlots[a + i].GetComponentInChildren<GridStone>());
                     playerHandSlots[a + i].GetComponent<Slot>().isOccupied = false;
