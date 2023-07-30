@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GridLayer : MonoBehaviour
+namespace InGame
 {
-   public int gridLayerID;
+   public class GridLayer : MonoBehaviour
+   {
+      public int gridLayerID;
+   }
 }

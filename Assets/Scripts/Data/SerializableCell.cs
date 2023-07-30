@@ -1,18 +1,19 @@
-using Data;
-
-[System.Serializable]
-public class SerializableCell
+namespace Data
 {
-    public int ID;
-    public int RowIndex;
-    public int ColIndex;
-    public string SpriteName;
-
-    public SerializableCell(Cell cell)
+    [System.Serializable]
+    public class SerializableCell
     {
-        ID = cell.ID;
-        RowIndex = cell.RowIndex;
-        ColIndex = cell.ColIndex;
-        SpriteName = cell.Sprite != null ? cell.Sprite.name : "";
+        public int ID;
+        public int RowIndex;
+        public int ColIndex;
+        public string SpriteName;
+
+        public SerializableCell(Cell cell)
+        {
+            ID = cell.ID;
+            RowIndex = cell.RowIndex;
+            ColIndex = cell.ColIndex;
+            SpriteName = cell.Sprite != null ? cell.Sprite.name : "";
+        }
     }
 }

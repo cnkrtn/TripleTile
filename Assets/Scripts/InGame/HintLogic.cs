@@ -3,69 +3,73 @@ using DG.Tweening;
 using Managers;
 using UnityEngine;
 
-public class HintLogic:MonoBehaviour
+namespace InGame
 {
-    private PlayerHandManager _playerHandManager;
-    private GameManager _gameManager;
-    public bool canHint;
-    public float hintTimer;
-    
-    private void Start()
+    public class HintLogic : MonoBehaviour
     {
-        _playerHandManager = FindObjectOfType<PlayerHandManager>();
-        _gameManager = FindObjectOfType<GameManager>();
-    }
+        private PlayerHandManager _playerHandManager;
+        private ShuffleLogic _shuffleLogic;
+        public bool canHint;
+        public float hintTimer;
 
-    private void Update()
-    {
-        if (canHint)
+        private void Start()
         {
-            HintTimer();
+            _playerHandManager = FindObjectOfType<PlayerHandManager>();
+            _shuffleLogic = FindObjectOfType<ShuffleLogic>();
         }
-    }
 
-    private void Hint()
-    {
-        if (_playerHandManager.playerHandStones.Count <= 0) return;
-        _gameManager.slotsToShuffle.Clear();
-        _gameManager.AddToListToShuffle();
-        List<RectTransform> stones = new();
-         
-        foreach (var slot in _gameManager.slotsToShuffle)
+        private void Update()
         {
-            var stone = slot.transform.GetComponentInChildren<GridStone>();
-            if (stone.isClickable)
+            if (canHint)
             {
-                stones.Add((RectTransform)stone.transform);
+                HintTimer();
             }
         }
 
-        var i = UnityEngine.Random.Range(0, _playerHandManager.playerHandStones.Count);
-        foreach (var stone in stones)
+        private void Hint()
         {
-            if (_playerHandManager.playerHandStones[i].stoneID !=
-                stone.GetComponent<GridStone>().stoneID) continue;
-            stone.transform.DOScale(Vector3.one * 1.2f, 1f).SetLoops(2,LoopType.Yoyo)
-                .OnComplete(() =>
+            if (_playerHandManager.playerHandStones.Count <= 0) return;
+            _shuffleLogic.slotsToShuffle.Clear();
+            _shuffleLogic.AddToListToShuffle();
+            List<RectTransform> stones = new();
+
+            foreach (var slot in _shuffleLogic.slotsToShuffle)
+            {
+                var stone = slot.transform.GetComponentInChildren<GridStone>();
+                if (stone.isClickable)
                 {
-                    hintTimer = 0;
-                    canHint = true;
-                });
-                        
-            _playerHandManager.playerHandStones[i].transform.DOScale(Vector3.one * 1.2f, 1.5f).SetLoops(2,LoopType.Yoyo)
-                .OnComplete(() =>
-                {
-                    hintTimer = 0;
-                    canHint = true;
-                });
+                    stones.Add((RectTransform)stone.transform);
+                }
+            }
+
+            var i = UnityEngine.Random.Range(0, _playerHandManager.playerHandStones.Count);
+            foreach (var stone in stones)
+            {
+                if (_playerHandManager.playerHandStones[i].stoneID !=
+                    stone.GetComponent<GridStone>().stoneID) continue;
+                stone.transform.DOScale(Vector3.one * 1.2f, 1f).SetLoops(2, LoopType.Yoyo)
+                    .OnComplete(() =>
+                    {
+                        hintTimer = 0;
+                        canHint = true;
+                    });
+
+                _playerHandManager.playerHandStones[i].transform.DOScale(Vector3.one * 1.2f, 1.5f)
+                    .SetLoops(2, LoopType.Yoyo)
+                    .OnComplete(() =>
+                    {
+                        hintTimer = 0;
+                        canHint = true;
+                    });
+            }
         }
-    }
-    
-    private void HintTimer()
-    {
-        hintTimer += Time.deltaTime;
-        if (!(hintTimer >= 10)) return;
-        canHint = false;
-        Hint();
+
+        private void HintTimer()
+        {
+            hintTimer += Time.deltaTime;
+            if (!(hintTimer >= 10)) return;
+            canHint = false;
+            Hint();
+        }
     }
 }

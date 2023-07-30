@@ -11,10 +11,13 @@ namespace Editor
         private int cellSize = 40;
         private Stone[] stones = new Stone[6];
         private Stone selectedStone;
-        private List<List<Cell[,]>> gridsByLevel = new List<List<Cell[,]>>(); // There might be a class with a list of cells instead of this.
+
+        private List<List<Cell[,]>>
+            gridsByLevel = new List<List<Cell[,]>>(); // There might be a class with a list of cells instead of this.
+
         private int selectedGrid = 0;
         private int selectedLevel = 0;
-  
+
         private int selectedGridIndex = 0;
         private int selectedLevelIndex = 0;
 
@@ -32,7 +35,8 @@ namespace Editor
         private void OnEnable()
         {
             // Initialize the stone buttons with different colors and sprites
-            Sprite stone1Sprite = Resources.Load<Sprite>("Sprites/Red"); // Replace "Stone1Sprite" with the actual path to your sprite
+            Sprite stone1Sprite =
+                Resources.Load<Sprite>("Sprites/Red"); // Replace "Stone1Sprite" with the actual path to your sprite
             Sprite stone2Sprite = Resources.Load<Sprite>("Sprites/Green");
             Sprite stone3Sprite = Resources.Load<Sprite>("Sprites/Blue");
             Sprite stone4Sprite = Resources.Load<Sprite>("Sprites/Yellow");
@@ -56,8 +60,6 @@ namespace Editor
             {
                 LoadGridsForLevel(i);
             }
-        
-        
         }
 
         private List<Cell[,]> CreateEmptyLevel()
@@ -67,6 +69,7 @@ namespace Editor
             {
                 level.Add(CreateEmptyGrid());
             }
+
             return level;
         }
 
@@ -80,6 +83,7 @@ namespace Editor
                     grid[col, row] = new Cell(0, null, col, row);
                 }
             }
+
             return grid;
         }
 
@@ -100,7 +104,7 @@ namespace Editor
 
             if (GUILayout.Button("Clear Grid"))
             {
-                ClearGrid(selectedLevel,selectedGrid);
+                ClearGrid(selectedLevel, selectedGrid);
             }
 
             if (GUILayout.Button("Clear Level"))
@@ -115,6 +119,7 @@ namespace Editor
 
             GUILayout.EndHorizontal();
         }
+
         private void ClearAllGrids()
         {
             // Loop through all levels and grids and reset them to empty grids
@@ -129,6 +134,7 @@ namespace Editor
             // Repaint the editor window to reflect the changes
             Repaint();
         }
+
         private void ClearLevel(int levelIndex)
         {
             // Check if the level index is within valid range
@@ -147,10 +153,12 @@ namespace Editor
             // Repaint the editor window to reflect the changes
             Repaint();
         }
+
         private void ClearGrid(int levelIndex, int gridIndex)
         {
             // Check if the level and grid are within valid ranges
-            if (levelIndex < 0 || levelIndex >= gridsByLevel.Count || gridIndex < 0 || gridIndex >= gridsByLevel[levelIndex].Count)
+            if (levelIndex < 0 || levelIndex >= gridsByLevel.Count || gridIndex < 0 ||
+                gridIndex >= gridsByLevel[levelIndex].Count)
             {
                 Debug.LogError("Invalid level or grid index.");
                 return;
@@ -169,6 +177,7 @@ namespace Editor
             // Repaint the editor window to reflect the changes
             Repaint();
         }
+
         private void OnGUI()
         {
             GUILayout.Space(10);
@@ -199,9 +208,9 @@ namespace Editor
                     OnStoneButtonClick(stone);
                 }
             }
+
             GUILayout.EndHorizontal();
         }
-
 
 
         private void OnStoneButtonClick(Stone stone)
@@ -209,7 +218,7 @@ namespace Editor
             selectedStone = stone;
         }
 
- 
+
         private void DrawDropdownMenus()
         {
             GUILayout.BeginHorizontal();
@@ -240,7 +249,8 @@ namespace Editor
                     Cell cell = gridsByLevel[selectedLevel][selectedGrid][col, row];
                     if (cell.Sprite != null)
                     {
-                        if (GUILayout.Button(cell.Sprite.texture, GUILayout.Width(cellSize), GUILayout.Height(cellSize)))
+                        if (GUILayout.Button(cell.Sprite.texture, GUILayout.Width(cellSize),
+                                GUILayout.Height(cellSize)))
                         {
                             OnCellClick(cell);
                         }
@@ -253,13 +263,15 @@ namespace Editor
                         }
                     }
                 }
+
                 GUILayout.EndVertical();
             }
+
             GUILayout.EndHorizontal();
 
             GUILayout.EndVertical();
         }
-    
+
         private void OnCellClick(Cell cell)
         {
             if (selectedStone != null)
@@ -267,7 +279,7 @@ namespace Editor
                 cell.ID = selectedStone.ID;
                 cell.Sprite = selectedStone.Sprite;
 
-                int row =  cell.RowIndex;
+                int row = cell.RowIndex;
                 int column = cell.ColIndex;
 
                 Debug.Log($"Cell Clicked: ID={cell.ID}, Sprite={cell.Sprite.name}, Row={row}, Column={column}");
@@ -278,7 +290,6 @@ namespace Editor
             }
         }
 
-   
 
         private void SaveGridsForLevel(int levelIndex)
         {
@@ -382,7 +393,6 @@ namespace Editor
             string spritePath = "Sprites/" + spriteName;
             return Resources.Load<Sprite>(spritePath);
         }
-
 
 
         private string GetSavePathForLevel(int levelIndex)

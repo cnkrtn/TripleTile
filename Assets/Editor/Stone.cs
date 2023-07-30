@@ -1,16 +1,19 @@
 using UnityEngine;
 
-[System.Serializable]
-public class Stone
+namespace Editor
 {
-    public int ID { get; private set; }
-    public Color Color { get; private set; }
-    public Sprite Sprite { get; private set; }
-
-    public Stone(int id, Color color, Sprite sprite)
+    [System.Serializable]
+    public class Stone
     {
-        ID = id;
-        Color = color;
-        Sprite = sprite;
+        public int ID { get; private set; }
+        public Color Color { get; private set; }
+        public Sprite Sprite { get; private set; }
+
+        public Stone(int id, Color color, Sprite sprite)
+        {
+            ID = id;
+            Color = color;
+            Sprite = sprite;
+        }
     }
 }

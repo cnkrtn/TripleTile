@@ -1,25 +1,21 @@
 using UnityEngine;
 
-public class GridCell : MonoBehaviour
+namespace InGame
 {
-    [SerializeField] public int rowIndex;
-    [SerializeField] public  int colIndex;
-    public int stoneId;
-    
-    
-
-    private void Awake()
+    public class GridCell : MonoBehaviour
     {
-        
-        var gridLayer = transform.parent;
-        
-        var cellIndex = transform.GetSiblingIndex();
-        
-        
-        var gridSize = Mathf.RoundToInt(Mathf.Sqrt(gridLayer.childCount));
-        rowIndex = cellIndex / gridSize;
-        colIndex = cellIndex % gridSize;
+        [SerializeField] public int rowIndex;
+        [SerializeField] public int colIndex;
+        public int stoneId;
 
-        
+
+        private void Awake()
+        {
+            var gridLayer = transform.parent;
+            var cellIndex = transform.GetSiblingIndex();
+            var gridSize = Mathf.RoundToInt(Mathf.Sqrt(gridLayer.childCount));
+            rowIndex = cellIndex / gridSize;
+            colIndex = cellIndex % gridSize;
+        }
     }
 }

@@ -1,14 +1,17 @@
 using System.Collections.Generic;
 
-[System.Serializable]
-public class SerializableGrid
+namespace Data
 {
-    public int Index; // Add an index to identify the grid
-    public List<SerializableCell> Cells;
-
-    public SerializableGrid(int index, List<SerializableCell> cells)
+    [System.Serializable]
+    public class SerializableGrid
     {
-        Index = index;
-        Cells = cells;
+        public int Index; // Add an index to identify the grid
+        public List<SerializableCell> Cells;
+
+        public SerializableGrid(int index, List<SerializableCell> cells)
+        {
+            Index = index;
+            Cells = cells;
+        }
     }
 }

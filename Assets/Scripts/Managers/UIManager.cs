@@ -1,10 +1,10 @@
-using System;
+
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+
 
 namespace Managers
 {
@@ -16,36 +16,35 @@ namespace Managers
         [SerializeField] private TextMeshProUGUI timerText;
         [SerializeField] private TextMeshProUGUI timeScoreText,pieceScoreText,totalScoreText;
         
-        private GameManager _gameManager;
+        private SaveLoadManager _saveLoadManager;
         private float _currentTime;
         private int _timeScore,_pieceScore;
         
-        public bool _isTimerRunning,_firstScoreRoutineIsFinished;
+        public bool isTimerRunning;
         private readonly WaitForSeconds _countTime = new(0.001f);
 
         private void Awake()
         {
-            _gameManager = FindObjectOfType<GameManager>();
-            
+            _saveLoadManager = FindObjectOfType<SaveLoadManager>();
         }
 
         private void Start()
         {
-            levelText.text = "LEVEL " + (_gameManager.levelIndex + 1);
-            _currentTime = _gameManager.modeIndex == 0 ? 0f : 120f;
-            _isTimerRunning = true;
+            levelText.text = "LEVEL " + (_saveLoadManager.levelIndex + 1);
+            _currentTime = _saveLoadManager.modeIndex == 0 ? 0f : 120f;
+            isTimerRunning = true;
         }
 
         private void Update()
         {
-            if (!_isTimerRunning) return;
+            if (!isTimerRunning) return;
             UpdateTimer();
             UpdateTimerUI();
         }
 
         private void UpdateTimer()
         {
-            if (_gameManager.modeIndex == 0)
+            if (_saveLoadManager.modeIndex == 0)
             {
                 _currentTime += Time.deltaTime;
             }
@@ -54,7 +53,7 @@ namespace Managers
                 _currentTime -= Time.deltaTime;
                 if (_currentTime <= 0)
                 {
-                    _isTimerRunning = false;
+                    isTimerRunning = false;
                     losePanel.SetActive(true);
                 }
             }
@@ -71,7 +70,7 @@ namespace Managers
 
         public void ScoreCounter()
         {
-            _isTimerRunning = false;
+            isTimerRunning = false;
             StartCoroutine(CountPieceScore());
             
         }
@@ -91,38 +90,28 @@ namespace Managers
         
         private IEnumerator CountTimeScore()
         {
-           // yield return new WaitUntil(() => _firstScoreRoutineIsFinished);
             var currentCount = 0;
 
             while (currentCount <= CalculateTimeScore())
             {
-               
                 timeScoreText.text = "Time Bonus " +"       "+ currentCount.ToString();
-                
                 currentCount += 5;
-                
-                 yield return _countTime;
+                yield return _countTime;
             }
-
-            _gameManager.totalScore += _timeScore + _pieceScore;
-            totalScoreText.text = "Total Score " +"       "+ ( _gameManager.totalScore).ToString();
-            _gameManager.SaveTotalScore();
+            _saveLoadManager.totalScore += _timeScore + _pieceScore;
+            totalScoreText.text = "Total Score " +"       "+ ( _saveLoadManager.totalScore).ToString();
+            _saveLoadManager.SaveTotalScore();
         }
 
         private IEnumerator CountPieceScore()
         {
             var currentCount = 0;
-
             while (currentCount <= CalculatePieceScore())
             {
-               
                 pieceScoreText.text = "Piece Matched " +"     "+ currentCount.ToString();
-                
                 currentCount+=10;
-                
                 yield return _countTime;
             }
-
             StartCoroutine(CountTimeScore());
         }
 
@@ -135,22 +124,16 @@ namespace Managers
         public void NextLevel()
         {
             var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            
-            _gameManager.SaveLevelIndex();
-            
+            _saveLoadManager.SaveLevelIndex();
             SceneManager.LoadScene(currentSceneIndex);
-            
         }
         public void MainMenu()
         {
             var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            
-            _gameManager.SaveLevelIndex();
-            
+            _saveLoadManager.SaveLevelIndex();
             SceneManager.LoadScene(currentSceneIndex -1);
             PlayerPrefs.DeleteAll();
             PlayerPrefs.Save();
-            
         }
      
     }

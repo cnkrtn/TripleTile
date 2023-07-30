@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using InGame;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = System.Random;
@@ -14,6 +15,7 @@ namespace Managers
         public float clickTimer;
         public bool canClick;
         private Touch _touch;
+
         private void Awake()
         {
             _playerHandManager = FindObjectOfType<PlayerHandManager>();
@@ -42,7 +44,8 @@ namespace Managers
 
 
                 var results = new List<RaycastResult>();
-                EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = inputPosition }, results);
+                EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = inputPosition },
+                    results);
 
                 foreach (RaycastResult result in results)
                 {
@@ -67,8 +70,5 @@ namespace Managers
             canClick = true;
             clickTimer = 0;
         }
-
-       
-        
-        }
     }
+}

@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Slot : MonoBehaviour
+namespace InGame
 {
-    public bool isOccupied;
-    public int occupyingId;
+    public class Slot : MonoBehaviour
+    {
+        public bool isOccupied;
+        public int occupyingId;
+    }
 }

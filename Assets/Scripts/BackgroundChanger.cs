@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using Data;
 using Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,11 +9,11 @@ public class BackgroundChanger : MonoBehaviour
 {
     [SerializeField] private List<Sprite> backgroundImages;
     [SerializeField] private Image image;
-    private GameManager _gameManager;
+    private SaveLoadManager _saveLoadManager;
 
     private void Start()
     {
-        _gameManager = FindObjectOfType<GameManager>();
-        image.sprite = backgroundImages[_gameManager.levelIndex];
+        _saveLoadManager = FindObjectOfType<SaveLoadManager>();
+        image.sprite = backgroundImages[_saveLoadManager.levelIndex];
     }
 }
