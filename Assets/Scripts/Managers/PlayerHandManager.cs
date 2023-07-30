@@ -53,6 +53,14 @@ namespace Managers
                  var slotToMove = playerHandSlots[j].GetComponent<Slot>();
 
                  var position = (RectTransform)playerHandSlots[j].transform;
+                 // if (stoneObject.parent.GetComponent<Slot>())
+                 // {
+                 //     stoneObject.DOMove(position.position, slideDuration).SetEase(Ease.InBack,0.5f,0.5f); 
+                 // }
+                 // else
+                 // {
+                 //     stoneObject.DOMove(position.position, moveDuration).SetEase(Ease.InBack,0.5f,0.5f); 
+                 // }
                  stoneObject.DOMove(position.position, slideDuration).SetEase(Ease.InBack,0.5f,0.5f); 
                  stoneObject.SetParent(playerHandSlots[j]);
                  slotToMove.occupyingId = playerHandStones[j].stoneID;

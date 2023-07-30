@@ -32,20 +32,19 @@ namespace Managers
         private void Start()
         {
             levelText.text = "LEVEL " + (_gameManager.levelIndex + 1);
-            if (_gameManager.modeIndex == 0)
-            {
-                _currentTime = 0f;
-            }
-            else
-            {
-                _currentTime = 10f;
-            }
+            _currentTime = _gameManager.modeIndex == 0 ? 0f : 120f;
             _isTimerRunning = true;
         }
 
         private void Update()
         {
             if (!_isTimerRunning) return;
+            UpdateTimer();
+            UpdateTimerUI();
+        }
+
+        private void UpdateTimer()
+        {
             if (_gameManager.modeIndex == 0)
             {
                 _currentTime += Time.deltaTime;
@@ -59,8 +58,8 @@ namespace Managers
                     losePanel.SetActive(true);
                 }
             }
-            UpdateTimerUI();
         }
+
         private void UpdateTimerUI()
         {
            

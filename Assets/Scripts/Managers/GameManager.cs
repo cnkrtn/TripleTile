@@ -1,9 +1,9 @@
-using System;
+
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.Serialization;
+
 
 namespace Managers
 {
@@ -17,31 +17,27 @@ namespace Managers
         [SerializeField] private List<RectTransform> allSlots;
         private LevelLoader _levelLoader;
         private UIManager _uiManager;
+        private readonly WaitForSeconds _winPanelOpenDuration = new(2);
 
-       
-       
+        
        private const string LevelIndexKey = "LevelIndex"; 
        private const string ScoreIndexKey = "ScoreIndex";
        private const string ModeIndexKey = "ModeIndex";
-        
-       
-        void Awake()
+
+
+       private void Awake()
         {
-            
             _levelLoader = FindObjectOfType<LevelLoader>();
             _uiManager = FindObjectOfType<UIManager>();
             LoadData();
             gridLayers = _levelLoader.gridLayers;
         }
-
        
-
         private void Start()
         {
             _levelLoader.LoadLevel(levelIndex);
             SetTheStones();
             _uiManager.totalPieceCount = totalStoneCount;
-            
             AddToListToShuffle();
         }
 
@@ -78,23 +74,21 @@ namespace Managers
                     stone.SetActive(true);
                     stone.transform.SetParent(gridCell.transform);
                     totalStoneCount++;
-                    Debug.Log("Done");
-
                 }
             }
-            
-           
         }
 
         public void CheckTotalStoneCount()
         {
             totalStoneCount--;
-            if (totalStoneCount <= 0)
-            {
-                // Level Finished
-                _uiManager.winPanel.SetActive(true);
-                Debug.Log("Level Finished");
-            }
+            if (totalStoneCount > 0) return;
+            StartCoroutine(StartLevelWinUI());
+        }
+
+        private IEnumerator StartLevelWinUI()
+        {
+            yield return _winPanelOpenDuration;
+            _uiManager.winPanel.SetActive(true);
         }
 
         public void SaveLevelIndex()

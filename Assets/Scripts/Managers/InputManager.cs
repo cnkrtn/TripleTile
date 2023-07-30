@@ -66,7 +66,7 @@ namespace Managers
         private void ClickTimer()
         {
             clickTimer += Time.deltaTime;
-            if (!(hintTimer >= 1f)) return;
+            if (!(hintTimer >= 0.8f)) return;
             canClick = true;
             clickTimer = 0;
         }
@@ -115,12 +115,7 @@ namespace Managers
                         hintTimer = 0;
                         canHint = true;
                     });
-
-                   
-
             }
-
-               
         }
         }
     }

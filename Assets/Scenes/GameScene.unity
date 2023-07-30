@@ -14838,7 +14838,7 @@ MonoBehaviour:
   lastMovedPiece: {fileID: 0}
   previousSlotsId: 0
   slideDuration: 0.5
-  moveDuration: 1
+  moveDuration: 0.2
   destroyDuration: 0
 --- !u!1 &1712230345
 GameObject:
