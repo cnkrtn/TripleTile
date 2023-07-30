@@ -35,11 +35,7 @@ namespace Managers
                     slotToMove.isOccupied = true;
                 }  
             }
-            
-        
-
-
-        private void AddToList(GridStone gridStone, int i)
+         private void AddToList(GridStone gridStone, int i)
         {
             playerHandStones.Insert(i,gridStone);
             gridStone.isClickable = false;
@@ -67,11 +63,13 @@ namespace Managers
                 if (stone1.stoneID != stone2.stoneID || stone1.stoneID != stone3.stoneID) continue;
                 for (int i = 0; i < 3; i++)
                 {
-                    Destroy(playerHandSlots[a + i].GetChild(0).gameObject);
+                    Destroy(playerHandSlots[a + i].GetChild(0).gameObject,1.3f);
+                    playerHandSlots[a + i].GetChild(0).transform.DOScale(Vector3.zero, 1.2f);
                     _gameManager.CheckTotalStoneCount();
                     playerHandStones.Remove(playerHandSlots[a + i].GetComponentInChildren<GridStone>());
                     playerHandSlots[a + i].GetComponent<Slot>().isOccupied = false;
                     playerHandSlots[a + i].GetComponent<Slot>().occupyingId = 0;
+                    
                 }
                     
                
