@@ -30,7 +30,7 @@ namespace Managers
             ClickTimer();
             
 
-            if (Input.GetMouseButtonDown(0) && canClick)
+            if (Input.GetMouseButtonDown(0))
             {
                    
                 canClick = false;
@@ -69,7 +69,7 @@ namespace Managers
         private void ClickTimer()
         { 
             clickTimer += Time.deltaTime;
-            if (!(hintTimer >= 1)) return;
+            if (!(hintTimer >= 1f)) return;
             canClick = true;
             clickTimer = 0;
         }

@@ -18,40 +18,19 @@ namespace Managers
         {
             _gameManager = FindObjectOfType<GameManager>();
         }
-
         
+     
 
-         private void MoveStones()
+         private void ClearSlotOccupation()
          {
-             for (var j = 0; j < playerHandStones.Count; j++)
-             {
-                 if (playerHandStones[j] == null) continue;
-                    
-                 var stoneObject = (RectTransform)playerHandStones[j].transform;
-                 var slotToMove = playerHandSlots[j].GetComponent<Slot>();
-                    
-                 // if (stoneObject.parent.GetComponent<Slot>() != null)
-                 // {
-                 //     var slotToMoveFrom = stoneObject.parent.GetComponent<Slot>();
-                 //     slotToMoveFrom.occupyingId = 0;
-                 //     slotToMoveFrom.isOccupied = false;
-                 // }
-                 stoneObject.SetParent(playerHandSlots[j]);
-                 stoneObject.DOLocalMove(Vector3.zero, slideDuration).SetEase(Ease.InBack,0.5f,0.5f); 
-                 slotToMove.occupyingId = playerHandStones[j].stoneID;
-                 slotToMove.isOccupied = true;
-             }
-
              foreach (var slot in playerHandSlots)
              {
-                 if (slot.childCount <= 0)
-                 {
-                     slot.GetComponent<Slot>().isOccupied = false;
-                     slot.GetComponent<Slot>().occupyingId = 0;
-             
-                 }
+                 if (slot.childCount > 0) continue;
+                 slot.GetComponent<Slot>().isOccupied = false;
+                 slot.GetComponent<Slot>().occupyingId = 0;
              }
          }
+
          private void AddToList(GridStone gridStone, int i)
         {
             playerHandStones.Insert(i,gridStone);
@@ -60,12 +39,29 @@ namespace Managers
             lastPieceGridObject = (RectTransform)lastMovedPiece.parent.transform;
             
             MoveStones();
-            MergeAndDestroy();
             EventManager.OnStoneAddedToPlayerHand?.Invoke();
             
             
         }
+         private void MoveStones()
+         {
+             for (var j = 0; j < playerHandStones.Count; j++)
+             {
+                 if (playerHandStones[j] == null) continue;
+                    
+                 var stoneObject = (RectTransform)playerHandStones[j].transform;
+                 var slotToMove = playerHandSlots[j].GetComponent<Slot>();
 
+                 var position = (RectTransform)playerHandSlots[j].transform;
+                 stoneObject.DOMove(position.position, slideDuration).SetEase(Ease.InBack,0.5f,0.5f); 
+                 stoneObject.SetParent(playerHandSlots[j]);
+                 slotToMove.occupyingId = playerHandStones[j].stoneID;
+                 slotToMove.isOccupied = true;
+             }
+
+             ClearSlotOccupation();
+             MergeAndDestroy();
+         }
         private void MergeAndDestroy()
         {
             if (playerHandStones.Count < 2) return;
@@ -78,7 +74,7 @@ namespace Managers
 
 
                 if (stone1.stoneID != stone2.stoneID || stone1.stoneID != stone3.stoneID) continue;
-                for (int i = 0; i < 3; i++)
+                for (var i = 0; i < 3; i++)
                 {
                     Destroy(playerHandSlots[a + i].GetChild(0).gameObject,1f);
                     playerHandSlots[a + i].GetChild(0).transform.DOScale(Vector3.zero, 0.5f).SetDelay(0.5f).SetEase(Ease.InBack,2.5f,0.5f);
@@ -88,8 +84,8 @@ namespace Managers
                     playerHandSlots[a + i].GetComponent<Slot>().occupyingId = 0;
                     
                 }
-                    
-               
+
+                previousSlotsId = 0;
                 Invoke(nameof(MoveStones),0.7f);
             }
         }
@@ -100,27 +96,57 @@ namespace Managers
             for (var i = 0; i < playerHandSlots.Count; i++)
             {
                 var slot = playerHandSlots[i].GetComponent<Slot>();
-                if (!slot.isOccupied)
+                
+                
+                if (i  < playerHandStones.Count && playerHandStones[i].stoneID == gridStone.stoneID)
                 {
-                    AddToList(gridStone, i);
-                    previousSlotsId = 0;
-                    Debug.Log("Section 1 Passed!");
-                    return;
+                    if (i + 1 < playerHandStones.Count && playerHandStones[i + 1].stoneID == gridStone.stoneID)
+                    {
+                        AddToList(gridStone,i+2);
+                        return;
+                    }
+                    else
+                    {
+                        AddToList(gridStone,i+1);
+                        return;
+                    }
                 }
-
-                if (previousSlotsId == gridStone.stoneID)
+                else
                 {
-                   
-                    AddToList(gridStone, i);
-                    Debug.Log("Section 2 Passed!");
-                    return;
+                    if (!slot.isOccupied)
+                    {
+                        AddToList(gridStone, i);
+                        Debug.Log("Section 1 Passed!");
+                        return;
+                    }
                 }
-
-                if (gridStone.stoneID == slot.occupyingId)
-                {
-                    previousSlotsId = slot.occupyingId;
-                    Debug.Log("Section 3 Passed!");
-                }
+                
+                
+                
+                
+                
+                
+                
+                // if (!slot.isOccupied)
+                // {
+                //     AddToList(gridStone, i);
+                //     previousSlotsId = 0;
+                //     Debug.Log("Section 1 Passed!");
+                //     return;
+                // }
+                // if (previousSlotsId == gridStone.stoneID)
+                // {
+                //    
+                //     AddToList(gridStone, i);
+                //     Debug.Log("Section 2 Passed!");
+                //     return;
+                // }
+                //
+                // if (gridStone.stoneID == slot.occupyingId)
+                // {
+                //     previousSlotsId = slot.occupyingId;
+                //     Debug.Log("Section 3 Passed!");
+                // }
 
             }
 
