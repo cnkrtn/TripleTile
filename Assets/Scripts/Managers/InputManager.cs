@@ -26,26 +26,26 @@ namespace Managers
                 HintTimer();
             }
 
-           
             ClickTimer();
-            
 
-            if (Input.GetMouseButtonDown(0)&& canClick)
+            // Handle mouse click or touch input
+            if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && canClick)
             {
-                   
                 canClick = false;
-                if (!EventSystem.current.IsPointerOverGameObject()) return;
-                
-                var eventData = new PointerEventData(EventSystem.current)
+
+                // Get the input position (mouse or touch)
+                Vector2 inputPosition = Input.mousePosition;
+                if (Input.touchCount > 0)
                 {
-                    position = Input.mousePosition
-                };
+                    Touch touch = Input.GetTouch(0);
+                    inputPosition = touch.position;
+                }
 
                 // Create a list to store the raycast results
                 var results = new List<RaycastResult>();
 
-                // Raycast from the event data and store the results in the list
-                EventSystem.current.RaycastAll(eventData, results);
+                // Raycast from the input position and store the results in the list
+                EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = inputPosition }, results);
 
                 // Loop through the results to find the parent UI object with the GridStone script
                 foreach (RaycastResult result in results)
@@ -53,26 +53,24 @@ namespace Managers
                     var gridStone = result.gameObject.GetComponentInParent<GridStone>();
                     if (gridStone == null) continue;
                     if (!gridStone.isClickable) return;
-                    
+
                     Debug.Log("Hit successful: GridStone found!");
-                    
+
                     _playerHandManager.MoveToPlayerHand(gridStone);
                     hintTimer = 0;
                     canHint = true;
                     break;
-                    
-                    
                 }
             }
         }
-
         private void ClickTimer()
-        { 
+        {
             clickTimer += Time.deltaTime;
             if (!(hintTimer >= 1f)) return;
             canClick = true;
             clickTimer = 0;
         }
+
         private void HintTimer()
         {
             hintTimer += Time.deltaTime;
@@ -80,7 +78,6 @@ namespace Managers
             canHint = false;
             Hint();
         }
-
         private void Hint()
         {
             if (_playerHandManager.playerHandStones.Count <= 0) return;
