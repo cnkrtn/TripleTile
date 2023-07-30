@@ -11,7 +11,7 @@ namespace Editor
         private int cellSize = 40;
         private Stone[] stones = new Stone[6];
         private Stone selectedStone;
-        private List<List<Cell[,]>> gridsByLevel = new List<List<Cell[,]>>();
+        private List<List<Cell[,]>> gridsByLevel = new List<List<Cell[,]>>(); // There might be a class with a list of cells instead of this.
         private int selectedGrid = 0;
         private int selectedLevel = 0;
   
@@ -308,7 +308,7 @@ namespace Editor
                 serializedGrids.Add(new SerializableGrid(gridIndex, serializedCells));
             }
 
-            SerializableLevel serializableLevel = new SerializableLevel(levelIndex, serializedGrids);
+            SerializableLevel serializableLevel = new SerializableLevel(serializedGrids);
 
             string savePath = GetSavePathForLevel(levelIndex);
             string json = JsonUtility.ToJson(serializableLevel, true);

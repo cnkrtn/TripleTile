@@ -49,11 +49,11 @@ namespace Managers
         }
         public void AddToListToShuffle()
         {
-            foreach (RectTransform parent in allSlots)
+            foreach (var parent in allSlots)
             {
-                for (int i = 0; i < parent.childCount; i++)
+                for (int i = 0; i < parent.transform.childCount; i++)
                 {
-                    RectTransform child = (RectTransform)parent.GetChild(i);
+                    var child = (RectTransform)parent.transform.GetChild(i);
                     if (child.childCount > 0)
                     {
                         slotsToShuffle.Add(child);
@@ -70,7 +70,7 @@ namespace Managers
                 {
                     var gridCell = grid.transform.GetChild(i).GetComponent<GridCell>();
                     if (gridCell.stoneId <= 0 || gridCell.stoneId >= stones.Count) continue;
-                    var stone = Instantiate(stones[gridCell.stoneId], gridCell.transform.position, quaternion.identity);
+                    var stone = Instantiate(stones[gridCell.stoneId], gridCell.transform.position, Quaternion.identity);
                     stone.SetActive(true);
                     stone.transform.SetParent(gridCell.transform);
                     totalStoneCount++;

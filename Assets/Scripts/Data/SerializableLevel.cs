@@ -1,14 +1,17 @@
 using System.Collections.Generic;
 
-[System.Serializable]
-public class SerializableLevel
+namespace Data
 {
-    public int LevelIndex;
-    public List<SerializableGrid> Grids;
-
-    public SerializableLevel(int levelIndex, List<SerializableGrid> grids)
+    [System.Serializable]
+    public class SerializableLevel
     {
-        LevelIndex = levelIndex;
-        Grids = grids;
+        
+        public List<SerializableGrid> Grids;
+
+        public SerializableLevel( List<SerializableGrid> grids)
+        {
+            
+            Grids = grids;
+        }
     }
 }
