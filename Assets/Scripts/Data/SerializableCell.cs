@@ -1,3 +1,5 @@
+using Data;
+
 [System.Serializable]
 public class SerializableCell
 {

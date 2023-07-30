@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using Data;
 using UnityEngine;
 
 namespace Managers
@@ -7,36 +8,27 @@ namespace Managers
     public class LevelLoader : MonoBehaviour
     {
         [Header("Level Data")]
-       // public int levelIndex; 
-        public List<GameObject> gridLayers; 
+        public List<GameObject> gridLayers;
+        public TextAsset levelData1;
+        public TextAsset levelData2;
+        public TextAsset levelData3;
+        public TextAsset levelData4;
+        public TextAsset levelData5;
 
-       
+      
 
-        private string GetSavePathForLevel(int levelIndex)
+        public void LoadLevel(int levelIndex)
         {
-            string levelFolderPath = "Assets/LevelData";
-            if (!Directory.Exists(levelFolderPath))
+            string json = GetJsonForLevel(levelIndex);
+            if (json != null)
             {
-                Directory.CreateDirectory(levelFolderPath);
-            }
-
-            return Path.Combine(levelFolderPath, $"Level_{levelIndex + 1}.json");
-        }
-
-        private void LoadGridsForLevel(int levelIndex)
-        {
-            string loadPath = GetSavePathForLevel(levelIndex);
-
-            if (File.Exists(loadPath))
-            {
-                string json = File.ReadAllText(loadPath);
                 SerializableLevel serializableLevel = JsonUtility.FromJson<SerializableLevel>(json);
 
                 List<Cell[,]> levelData = new List<Cell[,]>();
 
                 foreach (SerializableGrid serializedGrid in serializableLevel.Grids)
                 {
-                    int rows = 8; 
+                    int rows = 8;
                     int cols = 8;
 
                     Cell[,] grid = new Cell[cols, rows];
@@ -60,10 +52,19 @@ namespace Managers
             }
             else
             {
-                Debug.LogWarning($"Save data not found for Level {levelIndex + 1} at path: {loadPath}");
+                Debug.LogWarning($"Save data not found for Level {levelIndex + 1}.");
             }
         }
-        
+
+        private string GetJsonForLevel(int levelIndex)
+        {
+            TextAsset[] levelDatas = { levelData1, levelData2, levelData3, levelData4, levelData5 };
+            if (levelIndex >= 0 && levelIndex < levelDatas.Length)
+            {
+                return levelDatas[levelIndex].text;
+            }
+            return null;
+        }
 
         private void ApplyGridDataForLevel(List<Cell[,]> levelData)
         {
@@ -93,7 +94,7 @@ namespace Managers
                     if (gridCellTransform != null)
                     {
                         GridCell gridCell = gridCellTransform.GetComponent<GridCell>();
-                        gridCell.stoneId = cell.ID; 
+                        gridCell.stoneId = cell.ID;
                     }
                 }
             }
@@ -101,10 +102,7 @@ namespace Managers
             Debug.Log($"Grid data applied to GridLayer: {gridLayer.name}.");
         }
 
-        
-        public void LoadLevel(int levelIndex)
-        {
-            LoadGridsForLevel(levelIndex);
-        }
+       
+
     }
 }

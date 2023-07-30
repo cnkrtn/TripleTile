@@ -30,7 +30,7 @@ namespace Managers
             ClickTimer();
             
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0)&& canClick)
             {
                    
                 canClick = false;
