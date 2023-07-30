@@ -10,7 +10,7 @@ namespace Managers
     public class GameManager : MonoBehaviour
     {
         [SerializeField] public int totalStoneCount;
-        public int levelIndex,totalScore;
+        public int levelIndex,totalScore,modeIndex;
         public List<GameObject> gridLayers;
         public List<GameObject> stones;
         public List<RectTransform> slotsToShuffle;
@@ -22,6 +22,7 @@ namespace Managers
        
        private const string LevelIndexKey = "LevelIndex"; 
        private const string ScoreIndexKey = "ScoreIndex";
+       private const string ModeIndexKey = "ModeIndex";
         
        
         void Awake()
@@ -37,6 +38,10 @@ namespace Managers
 
         private void Start()
         {
+            if (modeIndex != 0)
+            {
+                
+            }
             _levelLoader.LoadLevel(levelIndex);
             SetTheStones();
             _uiManager.totalPieceCount = totalStoneCount;
@@ -48,6 +53,7 @@ namespace Managers
         {
             levelIndex = PlayerPrefs.GetInt(LevelIndexKey, 0);
             totalScore = PlayerPrefs.GetInt(ScoreIndexKey, 0);
+            modeIndex = PlayerPrefs.GetInt(ModeIndexKey, 0);
         }
         public void AddToListToShuffle()
         {

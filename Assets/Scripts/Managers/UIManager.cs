@@ -10,7 +10,7 @@ namespace Managers
 {
     public class UIManager : MonoBehaviour
     {
-        public GameObject winPanel;
+        public GameObject winPanel,losePanel;
         public  int totalPieceCount;
         [SerializeField] private TextMeshProUGUI levelText;
         [SerializeField] private TextMeshProUGUI timerText;
@@ -32,14 +32,33 @@ namespace Managers
         private void Start()
         {
             levelText.text = "Level " + _gameManager.levelIndex;
-            _currentTime = 0f;
+            if (_gameManager.modeIndex == 0)
+            {
+                _currentTime = 0f;
+            }
+            else
+            {
+                _currentTime = 10f;
+            }
             _isTimerRunning = true;
         }
 
         private void Update()
         {
             if (!_isTimerRunning) return;
-            _currentTime += Time.deltaTime;
+            if (_gameManager.modeIndex == 0)
+            {
+                _currentTime += Time.deltaTime;
+            }
+            else
+            {
+                _currentTime -= Time.deltaTime;
+                if (_currentTime <= 0)
+                {
+                    _isTimerRunning = false;
+                    losePanel.SetActive(true);
+                }
+            }
             UpdateTimerUI();
         }
         private void UpdateTimerUI()
@@ -81,7 +100,7 @@ namespace Managers
                
                 timeScoreText.text = "Time Bonus " +"       "+ currentCount.ToString();
                 
-                currentCount++;
+                currentCount += 5;
                 
                  yield return _countTime;
             }
@@ -100,7 +119,7 @@ namespace Managers
                
                 pieceScoreText.text = "Piece Matched " +"     "+ currentCount.ToString();
                 
-                currentCount++;
+                currentCount+=10;
                 
                 yield return _countTime;
             }
@@ -123,7 +142,17 @@ namespace Managers
             SceneManager.LoadScene(currentSceneIndex);
             
         }
-        
+        public void MainMenu()
+        {
+            var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            
+            _gameManager.SaveLevelIndex();
+            
+            SceneManager.LoadScene(currentSceneIndex -1);
+            PlayerPrefs.DeleteAll();
+            PlayerPrefs.Save();
+            
+        }
      
     }
 }
