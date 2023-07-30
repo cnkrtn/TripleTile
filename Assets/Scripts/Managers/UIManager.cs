@@ -31,7 +31,7 @@ namespace Managers
 
         private void Start()
         {
-            levelText.text = "Level " + _gameManager.levelIndex;
+            levelText.text = "Level " + _gameManager.levelIndex + 1;
             if (_gameManager.modeIndex == 0)
             {
                 _currentTime = 0f;

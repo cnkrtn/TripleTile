@@ -11,8 +11,8 @@ namespace Managers
     {
         private PlayerHandManager _playerHandManager;
         private GameManager _gameManager;
-        public float hintTimer;
-        public bool canHint;
+        public float hintTimer,clickTimer;
+        public bool canHint,canClick;
         private void Awake()
         {
             _playerHandManager = FindObjectOfType<PlayerHandManager>();
@@ -25,12 +25,15 @@ namespace Managers
             {
                 HintTimer();
             }
+
+           
+            ClickTimer();
             
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && canClick)
             {
                    
-                
+                canClick = false;
                 if (!EventSystem.current.IsPointerOverGameObject()) return;
                 
                 var eventData = new PointerEventData(EventSystem.current)
@@ -63,6 +66,13 @@ namespace Managers
             }
         }
 
+        private void ClickTimer()
+        { 
+            clickTimer += Time.deltaTime;
+            if (!(hintTimer >= 1)) return;
+            canClick = true;
+            clickTimer = 0;
+        }
         private void HintTimer()
         {
             hintTimer += Time.deltaTime;
