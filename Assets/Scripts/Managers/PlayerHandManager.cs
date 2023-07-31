@@ -125,7 +125,20 @@ namespace Managers
                 Invoke(nameof(MoveStones),0.7f);
             }
         }
-     
+        public void Undo()
+        {
+            if(lastMovedPiece == null) return;
+            var slotToMoveFrom = lastMovedPiece.parent.transform.GetComponent<Slot>();
+            lastMovedPiece.SetParent(lastPieceGridObject);
+            lastMovedPiece.DOLocalMove(Vector3.zero, moveDuration); 
+            slotToMoveFrom.occupyingId = 0;
+            slotToMoveFrom.isOccupied = false;
+            lastMovedPiece.GetComponent<GridStone>().isClickable = true;
+            playerHandStones.Remove(lastMovedPiece.GetComponent<GridStone>());
+            lastMovedPiece = null;
+            lastPieceGridObject = null;
+            EventManager.OnStoneAddedToPlayerHand?.Invoke();
+        }
        
 
         

@@ -12,8 +12,7 @@ namespace Editor
         private Stone[] stones = new Stone[6];
         private Stone selectedStone;
 
-        private List<List<Cell[,]>>
-            gridsByLevel = new List<List<Cell[,]>>(); // There might be a class with a list of cells instead of this.
+        private List<List<Cell[,]>> gridsByLevel = new List<List<Cell[,]>>(); // There might be a class with a list of cells instead of this.
 
         private int selectedGrid = 0;
         private int selectedLevel = 0;
@@ -35,8 +34,7 @@ namespace Editor
         private void OnEnable()
         {
             // Initialize the stone buttons with different colors and sprites
-            Sprite stone1Sprite =
-                Resources.Load<Sprite>("Sprites/Red"); // Replace "Stone1Sprite" with the actual path to your sprite
+            Sprite stone1Sprite = Resources.Load<Sprite>("Sprites/Red"); // Replace "Stone1Sprite" with the actual path to your sprite
             Sprite stone2Sprite = Resources.Load<Sprite>("Sprites/Green");
             Sprite stone3Sprite = Resources.Load<Sprite>("Sprites/Blue");
             Sprite stone4Sprite = Resources.Load<Sprite>("Sprites/Yellow");
